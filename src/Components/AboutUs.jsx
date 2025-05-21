@@ -1,10 +1,19 @@
 import React from 'react'
-
+import { BrowserRouter as Router, Route, Link, useLocation } from 'react-router-dom';
 import AboutImage from "../assets/images/about.jpg";
 
 const AboutUs = () => {
 
- 
+    const location = useLocation();
+    const isAboutPage = location.state?.hiddenParam || false; // Default to false if not provided
+
+    let lnkbtn;
+    
+    if(!isAboutPage){
+
+        lnkbtn= <Link to="/about" class="btn btn-primary py-3 px-4">Explore More</Link>
+    }
+    
   return (
     <div class="container-xxl py-5">
         <div class="container">
@@ -21,7 +30,10 @@ const AboutUs = () => {
 With one of the largest inventories in the region and unmatched growing capabilities, we are ready to supply all your wholesale native plant needs — big or small!
 
 At Peel Native Plants, we’re passionate about delivering exceptional plants and outstanding customer service. Let’s grow success together!</p>
-                    <a class="btn btn-primary py-3 px-4" href="">Explore More</a>
+                
+{lnkbtn}
+                  
+
                 </div>
                 <div class="col-lg-3 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
                     <div class="row g-5">

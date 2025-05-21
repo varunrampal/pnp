@@ -14,8 +14,9 @@ const NavBar = () => {
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
            <Link to="/" class="nav-item nav-link">Home</Link>
-           <Link to="/about" class="nav-item nav-link">About</Link>
-
+           {/* <Link to="/about" class="nav-item nav-link">About</Link> */}
+           {/* <Link to={{ pathname: '/about', state: { hiddenParam: 'secret' } }} class="nav-item nav-link">About</Link> */}
+           <Link to={"/about"} state={{hiddenParam: 'nobtn'}} class="nav-item nav-link">About</Link>
            {/* <Link to={{
       pathname: '/about',
       state: { hiddenParam: 'page' }

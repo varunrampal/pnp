@@ -23,9 +23,9 @@ const Footer = () => {
                 <Link to="/" class="btn btn-link">Home</Link>
                <Link to="/about" class="btn btn-link">About</Link>
                <Link to="/contact" class="btn btn-link">Contact</Link>
-                <a class="btn btn-link" href="">Our Services</a>
-                <a class="btn btn-link" href="">Terms & Condition</a>
-                <a class="btn btn-link" href="">Support</a>
+                <Link to="/quote" class="btn btn-link">Get A Quote</Link>
+                <Link to="/sales/information" class="btn btn-link">Sales Information</Link>
+                <Link to="/plants" class="btn btn-link">Plants</Link>
             </div>
             {/* <div class="col-lg-3 col-md-6">
             <h4 class="text-white mb-4">Our Location</h4>

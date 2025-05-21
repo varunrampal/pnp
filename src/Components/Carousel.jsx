@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import image1 from "../assets/images/carousel-1.jpg";
 import image2 from "../assets/images/carousel-2.jpg";   
 
@@ -16,7 +17,7 @@ const Carousel = () => {
                             <div class="col-lg-8">
                                 {/* <h1 class="display-1 text-white mb-5 animated slideInDown">Wholesale BC Native Plants</h1> */}
                                 <h1 class="text-white mb-5 animated slideInDown">Wholesale BC Native Plants</h1>
-                                <a href="" class="btn btn-primary py-sm-3 px-sm-4">Get A Quote</a>
+                                <Link to="/quote" class="btn btn-primary py-sm-3 px-sm-4">Get A Quote</Link>
                             </div>
                         </div>
                     </div>

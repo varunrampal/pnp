@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 const Mission = () => {
   return (
@@ -10,7 +11,7 @@ const Mission = () => {
                     <h1 class="display-5 mb-4">Our Mission & Commitment</h1>
                     <p class="mb-4">We are committed to satisfy each customer. We are not stopping until you are fully satisfied.</p>
                     <p>Our mission is to produce good quality plants at reasonable price. And we are committed to take the Nursery line of business to next level where Landscapers, Developers, Retail customers, and Garden centers can purchase any plants through us via online, phone or e-mail without visiting our Nursery. Once order is placed our team works very dedicatedly to complete the order and deliver.</p>
-                    <a class="btn btn-primary py-3 px-4" href="">Contact Now</a>
+                    <Link to="/contact" class="btn btn-primary py-3 px-4">Contact Now</Link>
                 </div>
                 <div class="col-lg-6">
                     <div class="row g-4 align-items-center">
