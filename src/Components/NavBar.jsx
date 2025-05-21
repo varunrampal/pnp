@@ -31,7 +31,8 @@ const NavBar = () => {
             </div>
             <Link to="/contact" class="nav-item nav-link">Contact</Link>
         </div>
-        <a href="" class="btn btn-primary py-4 px-lg-4 rounded-0 d-none d-lg-block">Get A Quote<i class="fa fa-arrow-right ms-3"></i></a>
+        <Link to="/quote" class="btn btn-primary py-4 px-lg-4 rounded-0 d-none d-lg-block">Get A Quote <i class="fa fa-arrow-right ms-3"></i></Link>
+      
     </div>
 </nav>
   )
