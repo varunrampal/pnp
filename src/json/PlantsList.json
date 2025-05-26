@@ -3,7 +3,7 @@
    "id": 1,
    "Name": "Thuja Plicata",
   "CommanName": "Western redcedar",
-  "Imgpath": "/assets/images/plants/thimbleberry.jpg",
+  "Imgpath": "./images/plants/thimbleberry.jpg",
   "Type": "Tree"
  },
  {
