@@ -31,7 +31,7 @@ const Carousel = () => {
                             <div class="col-lg-7">
                                 {/* <h1 class="display-1 text-white mb-5 animated slideInDown">Best Quality Plants</h1> */}
                                 <h1 class="text-white mb-5 animated slideInDown">Best Quality Plants</h1>
-                                <a href="" class="btn btn-primary py-sm-3 px-sm-4">Our Plants</a>
+                                <Link to="/plants" class="btn btn-primary py-sm-3 px-sm-4">Our Plants</Link>
                             </div>
                         </div>
                     </div>
