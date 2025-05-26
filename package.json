@@ -15,7 +15,8 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.3",
     "react-router-dom": "^7.6.0",
-    "reactjs-alert": "^2.5.2"
+    "reactjs-alert": "^2.5.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

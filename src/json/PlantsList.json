@@ -1,0 +1,141 @@
+[
+ {
+   "id": 1,
+   "Name": "Thuja Plicata",
+  "CommanName": "Western redcedar",
+  "Imgpath": "../src/assets/images/plants/thimbleberry.jpg",
+  "Type": "Tree"
+ },
+ {
+    "id": 2,
+  "Name": "Buxus Green Gem",
+  "CommanName": "Green Gem Boxwood",
+  "Type": "Shrub"
+ },
+ {
+    "id": 3,
+  "Name": "Taxus x media 'Hillii'",
+  "CommanName": "Hill's Yew",
+  "Type": "Shrub"
+ },
+ {
+    "id": 4,
+  "Name": "Lonicera lagostim lemon beauty",
+  "CommanName": "Box honeysuckle",
+  "Type": "Shrub"
+ },
+ {
+    "id": 5,
+  "Name": "Forsythia Lynwood Gold",
+  "CommanName": "border forsythia",
+  "Type": "P"
+ },
+ {
+    "id": 6,
+  "Name": "Taxus Brevifolia",
+  "CommanName": "western yew",
+  "Type": "P"
+ },
+ {
+    "id": 7,
+  "Name": "Lavandula Hidcote",
+  "CommanName": "Lavender",
+  "Type": "P"
+ },
+ {
+    "id": 8,
+  "Name": "Prunus Laurocerasus Otto Luyken",
+  "CommanName": "cherry laurel",
+  "Type": "S"
+ },
+ {
+    "id": 9,
+  "Name": "Spiraea Japonica 'Goldflame'",
+  "CommanName": "Goldflame spirea",
+  "Type": "S"
+ },
+ {
+    "id": 10,
+  "Name": "Cotoneaster Dammeri",
+  "CommanName": "bearberry cotoneaster",
+  "Type": "G"
+ },
+ {
+    "id": 11,
+  "Name": "Abelia grandiflora",
+  "CommanName": "Glossy Abelia",
+  "Type": "G"
+ },
+ {
+    "id": 12,
+  "Name": "Hosta variegated",
+  "CommanName": "Plantain lily",
+  "Type": "G"
+ },
+ {
+    "id": 13,
+  "Name": "Cornus Nuttallii 'Edde's White Wonder'",
+  "CommanName": "Western Flowering Dogwood",
+  "Type": "T"
+ },
+ {
+    "id": 14,
+  "Name": "Pieris Japonica 'Forest Flame'",
+  "CommanName": "Lily of the Valley shrub",
+  "Type": "S"
+ },
+ {
+       "id": 15,     
+  "Name": "Medium Rhododendron",
+  "CommanName": "Azaleas",
+  "Type": "S"
+ },
+ {
+    "id": 16,
+  "Name": "Rosa Meidiland Pink",
+  "CommanName": "Pink Meidiland",
+  "Type": "S"
+ },
+ {
+    "id": 17,
+  "Name": "Viburnum Davidii",
+  "CommanName": "David viburnum",
+  "Type": "S"
+ },
+ {
+    "id": 18,
+  "Name": "Juniperus Horizontalis",
+  "CommanName": "Creeping Juniper",
+  "Type": "S"
+ },
+ {
+    "id": 19,
+  "Name": "Euonymus Emerald",
+  "CommanName": "Winter Creeper",
+  "Type": "S"
+ },
+ {
+    "id": 20,
+  "Name": "Rosa Meidiland White ",
+  "CommanName": "Meidiland White Rose",
+  "Type": "S"
+ },
+ {
+"id": 21,
+  "Name": "Euonymus Emerald Gold",
+  "CommanName": "Wintercreeper",
+  "Type": "S"
+ },
+ {
+    "id": 22,
+  "Name": "Euonymus emerald gaiety ",
+  "CommanName": "Wintercreeper",
+  "Type": "S"
+ },
+ {
+     "id": 23,       
+  "Name": "Populus Tremuloides",
+  "CommanName": "Quaking aspen",
+  "Type": "T"
+ }
+]

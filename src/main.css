@@ -43,7 +43,7 @@ body {
   }
   
   .header-logo {
-    height: 87px;
+    height:104px;
   }
   
   /* Navigation */
@@ -403,4 +403,31 @@ body {
   .popup-content .close-popup:hover {
     background-color: #777;
   }
-  
+  .plant-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px #0000000d;
+    box-sizing: border-box;
+    padding: 5px 5px 30px;
+    text-align: center;
+    transition: transform .3s ease;
+}
+  .plant-card img {
+    border-radius: 6px;
+    height: 200px;
+    margin-bottom: 15px;
+    object-fit: cover;
+    width: 100%;
+}
+.plant-card h3 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+.plant-card .plant-category {
+    color: #4a7c59;
+    font-size: 15px;
+    font-style: italic;
+    font-weight: 500;
+    margin-bottom: 14px;
+}

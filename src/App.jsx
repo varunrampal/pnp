@@ -10,6 +10,7 @@ import About from './Pages/About';
 import Contact from './Pages/Contact';
 import SalesInfo from './Pages/SalesInfo';
 import Quote from './Pages/Quote';
+import Plants from './Pages/Plants';
 
 const App = () => {
   return (
@@ -24,7 +25,8 @@ const App = () => {
             <Route path="/about" element={<About />} />   
             <Route path="/contact" element={<Contact />} />
             <Route path="/Sales/Information" element={<SalesInfo />} />
-            <Route path="/Quote" element={<Quote />} />     
+            <Route path="/Quote" element={<Quote />} />   
+            <Route path="/Plants" element={<Plants />} />     
           </Routes>
           <BottomFeatures/>
           <Footer/>
