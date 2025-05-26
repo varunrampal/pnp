@@ -35,7 +35,7 @@ const [currentPage, setCurrentPage] = useState(1);
               {/* <div className="card-body"> */}
                   <img class="card-img-top" src={plant.Imgpath} alt={plant.Name}></img>
                 <h5>{plant.Name}</h5>
-                <h5>{plant.CommanName}{plant.Type}</h5>
+                <h5>{plant.CommanName}</h5>
                 <p class="plant-category">{plant.Type}</p>
               {/* </div> */}
             </div>

@@ -3,139 +3,164 @@
    "id": 1,
    "Name": "Thuja Plicata",
   "CommanName": "Western redcedar",
-  "Imgpath": "./images/plants/thimbleberry.jpg",
+  "Imgpath": "./images/plants/thujaplicata.jpg",
   "Type": "Tree"
  },
  {
     "id": 2,
   "Name": "Buxus Green Gem",
   "CommanName": "Green Gem Boxwood",
+  "Imgpath": "./images/plants/Buxus-green-gem.jpg",
   "Type": "Shrub"
+
+  
  },
  {
     "id": 3,
   "Name": "Taxus x media 'Hillii'",
   "CommanName": "Hill's Yew",
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+ 
   "Type": "Shrub"
  },
  {
     "id": 4,
   "Name": "Lonicera lagostim lemon beauty",
   "CommanName": "Box honeysuckle",
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
   "Type": "Shrub"
  },
  {
     "id": 5,
   "Name": "Forsythia Lynwood Gold",
   "CommanName": "border forsythia",
-  "Type": "P"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Perennial"
  },
  {
     "id": 6,
   "Name": "Taxus Brevifolia",
   "CommanName": "western yew",
-  "Type": "P"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Perennial"
  },
  {
     "id": 7,
   "Name": "Lavandula Hidcote",
   "CommanName": "Lavender",
-  "Type": "P"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Perennial"
  },
  {
     "id": 8,
   "Name": "Prunus Laurocerasus Otto Luyken",
   "CommanName": "cherry laurel",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Shrub"
  },
  {
     "id": 9,
   "Name": "Spiraea Japonica 'Goldflame'",
   "CommanName": "Goldflame spirea",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Shrub"
  },
  {
     "id": 10,
   "Name": "Cotoneaster Dammeri",
   "CommanName": "bearberry cotoneaster",
-  "Type": "G"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+ "Type": "Ground Cover"
  },
  {
     "id": 11,
   "Name": "Abelia grandiflora",
   "CommanName": "Glossy Abelia",
-  "Type": "G"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+ "Type": "Ground Cover"
  },
  {
     "id": 12,
   "Name": "Hosta variegated",
   "CommanName": "Plantain lily",
-  "Type": "G"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Ground Cover"
  },
  {
     "id": 13,
   "Name": "Cornus Nuttallii 'Edde's White Wonder'",
   "CommanName": "Western Flowering Dogwood",
-  "Type": "T"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Tree"
  },
  {
     "id": 14,
   "Name": "Pieris Japonica 'Forest Flame'",
   "CommanName": "Lily of the Valley shrub",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Shrub"
  },
  {
        "id": 15,     
   "Name": "Medium Rhododendron",
   "CommanName": "Azaleas",
-  "Type": "S"
+   "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Shrub"
  },
  {
     "id": 16,
   "Name": "Rosa Meidiland Pink",
   "CommanName": "Pink Meidiland",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+ "Type": "Shrub"
  },
  {
     "id": 17,
   "Name": "Viburnum Davidii",
   "CommanName": "David viburnum",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Shrub"
  },
  {
     "id": 18,
   "Name": "Juniperus Horizontalis",
   "CommanName": "Creeping Juniper",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Shrub"
  },
  {
     "id": 19,
   "Name": "Euonymus Emerald",
   "CommanName": "Winter Creeper",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Shrub"
  },
  {
     "id": 20,
   "Name": "Rosa Meidiland White ",
   "CommanName": "Meidiland White Rose",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+ "Type": "Shrub"
  },
  {
 "id": 21,
   "Name": "Euonymus Emerald Gold",
   "CommanName": "Wintercreeper",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Shrub"
  },
  {
     "id": 22,
   "Name": "Euonymus emerald gaiety ",
   "CommanName": "Wintercreeper",
-  "Type": "S"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Shrub"
  },
  {
      "id": 23,       
   "Name": "Populus Tremuloides",
   "CommanName": "Quaking aspen",
-  "Type": "T"
+    "Imgpath": "./images/plants/TINY-taxusxmediahillii3-1.jpg",
+  "Type": "Tree"
  }
 ]
