@@ -4,10 +4,8 @@ import logo from "../assets/images/header-logo.png";
 const NavBar = () => {
   return (
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-2">
-    <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-        {/* <h1 class="m-0">Gardener</h1> */}
-          <img src={logo} alt="Peels Native Plants" className="header-logo" />
-    </a>
+        <Link to="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5"><img src={logo} alt="Peels Native Plants" className="header-logo" /></Link>
+   
     <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
     </button>
