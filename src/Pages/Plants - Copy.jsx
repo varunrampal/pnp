@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react'
 import plants from '../json/PlantsList.json'
-import CustomPagination from '../Components/CustomPagination';
+
 const Plants = () => {
   const [plantsList, setPlantsList] = useState([]);
   const itemsPerPage = 12;
@@ -13,15 +13,16 @@ const Plants = () => {
   const endIndex = startIndex + itemsPerPage;
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const currentItems = items.slice(startIndex, endIndex);
- const pageSize = 12;
+
   useEffect(() => {
     setPlantsList(plants);
-
+    console.log('I am called1');
   }, []);
 
   useEffect(() => {
     setCurrentPage(1);
-      
+    console.log('I am called2');
+    
   }, [searchFilter]);
 
 
@@ -44,8 +45,8 @@ const Plants = () => {
 
 
   const paginatedData = filteredData.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
  
@@ -61,7 +62,7 @@ const Plants = () => {
         <input
           style={{ width: "200px" }}
           className='form-control mb-2'
-          placeholder='Search Plant'
+          placeholder='Search'
           value={searchFilter}
           onChange={handleFilter}
         />
@@ -81,21 +82,7 @@ const Plants = () => {
           ))}
         </div>
       </div>
-           {filteredData.length > 0 &&
-        <>
-        <div className='pagination justify-content-center'>  <CustomPagination
-            itemsCount={filteredData.length}
-            itemsPerPage={pageSize}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            alwaysShown={true}
-          /></div>
-        
-        
-         
-        </>
-      }
-      {/* <nav>
+      <nav>
         <ul className="pagination justify-content-center">
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
@@ -109,7 +96,7 @@ const Plants = () => {
             <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>Next</button>
           </li>
         </ul>
-      </nav> */}
+      </nav>
 
     </>
   )

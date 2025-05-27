@@ -13,7 +13,7 @@ const TopFeatures = () => {
                         </div>
                         <div class="ps-3">
                             <h4>Best Quality Plants</h4>
-                            <span>Clita erat ipsum lorem sit sed stet duo justo</span>
+                            <span>We grow best quality plants</span>
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@ const TopFeatures = () => {
                         </div>
                         <div class="ps-3">
                             <h4>Dedicated Team</h4>
-                            <span>Clita erat ipsum lorem sit sed stet duo justo</span>
+                            <span>We have dedicated team </span>
                         </div>
                     </div>
                 </div>
