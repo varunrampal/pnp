@@ -11,6 +11,7 @@ import Contact from './Pages/Contact';
 import SalesInfo from './Pages/SalesInfo';
 import Quote from './Pages/Quote';
 import Plants from './Pages/Plants';
+import Whatsapp from './Components/Whatsapp.jsx';
 
 const App = () => {
   return (
@@ -30,7 +31,9 @@ const App = () => {
           </Routes>
           <BottomFeatures/>
           <Footer/>
+         
         </Router>
+         <Whatsapp/>
        
  </>
   );
