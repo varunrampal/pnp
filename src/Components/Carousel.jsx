@@ -28,8 +28,8 @@ const Carousel = () => {
                                     <div class="col-lg-8">
                                         {/* <h1 class="display-1 text-white mb-5 animated slideInDown">Wholesale BC Native Plants</h1> */}
                                         <h1 class="text-white mb-5 animated slideInDown">Wholesale BC Native Plants</h1>
-                                        <Link to="/quote" class="btn btn-primary py-sm-3 px-sm-4">Get A Quote</Link>
-                                        <Link to="" class="btn btn-primary py-sm-3 px-sm-4" style={{ marginLeft: '5px' }} onClick={handleDownload}>Availability List</Link>
+                                        <Link to="/quote" class="btn btn-primary py-sm-3 px-sm-4">Get A Quote<i class="fa fa-arrow-right ms-3"></i></Link>
+                                        <Link to="" class="btn btn-primary py-sm-3 px-sm-4" style={{ marginLeft: '5px' }} onClick={handleDownload}>Availability List<i class="fa fa-download ms-3"></i></Link>
 
                                     </div>
                                 </div>

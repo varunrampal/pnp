@@ -39,7 +39,7 @@ const TopFeatures = () => {
                         </div>
                         <div class="ps-3">
                             <h4>24/7 Available</h4>
-                            <span>Clita erat ipsum lorem sit sed stet duo justo</span>
+                            <span>Always available to help</span>
                         </div>
                     </div>
                 </div>

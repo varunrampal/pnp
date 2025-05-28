@@ -37,8 +37,8 @@ const Quote = () => {
     <div class="container-fluid py-5">
     <div class="container">
         <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style={{maxHeight:'500px'}}>
-            <p class="fs-5 fw-bold text-primary">Quote</p>
-            <h1 class="display-5 mb-5">Get A Quote</h1>
+            {/* <p class="fs-5 fw-bold text-primary">Quote</p> */}
+            {/* <h1 class="display-5 mb-5">Get A Quote</h1> */}
         </div>
         <form class="formContainer" ref={form} onSubmit={sendEmail}>
         <div class="row justify-content-center">
