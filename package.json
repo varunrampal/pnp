@@ -17,6 +17,7 @@
     "react-hook-form": "^7.56.3",
     "react-router-dom": "^7.6.0",
     "reactjs-alert": "^2.5.2",
+    "reactjs-popup": "^2.0.6",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

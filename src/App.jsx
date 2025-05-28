@@ -12,11 +12,13 @@ import SalesInfo from './Pages/SalesInfo';
 import Quote from './Pages/Quote';
 import Plants from './Pages/Plants';
 import Whatsapp from './Components/Whatsapp.jsx';
+import AutoPopup from './Components/AutoPopup.jsx';
 
 const App = () => {
   return (
       
     <>
+    <AutoPopup/>
     <TopBar/>
      <Router>
       <NavBar/>
