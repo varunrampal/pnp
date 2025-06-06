@@ -3,6 +3,7 @@
    "id": 1,
    "Name": "Thuja Plicata",
   "CommanName": "Western redcedar",
+  "Description": "Thuja plicata, commonly known as Western redcedar, is a large evergreen conifer native to the Pacific Northwest of North America. It is valued for its durable wood and is often used in construction, furniture making, and landscaping.",
   "Imgpath": "./images/plants/thujaplicata.jpg",
   "Type": "Tree"
  },

@@ -1,6 +1,8 @@
 import { React, useState, useEffect } from 'react'
 import plants from '../json/PlantsList.json'
 import CustomPagination from '../Components/CustomPagination';
+import ZoomImage from '../Components/ZoomImage ';
+import Modal from '../Components/Modal';
 const Plants = () => {
   const [plantsList, setPlantsList] = useState([]);
   const itemsPerPage = 12;
@@ -13,7 +15,12 @@ const Plants = () => {
   const endIndex = startIndex + itemsPerPage;
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const currentItems = items.slice(startIndex, endIndex);
- const pageSize = 12;
+  const pageSize = 12;
+
+  const [activeItemId, setActiveItemId] = useState(null);
+  const openModal = (id) => setActiveItemId(id);
+  const closeModal = () => setActiveItemId(null);
+
   useEffect(() => {
     setPlantsList(plants);
 
@@ -21,7 +28,7 @@ const Plants = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-      
+
   }, [searchFilter]);
 
 
@@ -48,7 +55,7 @@ const Plants = () => {
     currentPage * pageSize
   );
 
- 
+
 
   return (
     <>
@@ -70,29 +77,59 @@ const Plants = () => {
             <div className="col-md-3 mb-4" key={index}>
 
               <div className="plant-card">
-                {/* <div className="card-body"> */}
-                <img class="card-img-top" src={plant.Imgpath} alt={plant.Name}></img>
-                <h5>{plant.Name}</h5>
-                <h5>{plant.CommanName}</h5>
+
+                <ZoomImage
+                  src={plant.Imgpath} alt={plant.Name}
+                />
+
+                <a href="#" class="plant-name-link" onClick={(e) => { e.preventDefault(); openModal(index); }}>
+                  {plant.Name}
+                </a>
+                <p class="plant-commanname">{plant.CommanName}</p>
                 <p class="plant-category">{plant.Type}</p>
-                {/* </div> */}
+                <Modal isOpen={activeItemId === index} onClose={closeModal}>
+                 
+
+                  <div class="container py-4">
+
+                    {/* <!-- Row 1: Full Width --> */}
+                    <div class="row mb-4">
+                      <div class="col">
+                        <div class="p-4">
+                           <h2>{plant.Name}</h2>
+                           <p>{plant.CommanName}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col">
+                        <div class="p-4">
+                           <p>{plant.Description}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                
+                </Modal>
               </div>
             </div>
           ))}
         </div>
       </div>
-           {filteredData.length > 0 &&
+      {filteredData.length > 0 &&
         <>
-        <div className='pagination justify-content-center'>  <CustomPagination
+          <div className='pagination justify-content-center'>  <CustomPagination
             itemsCount={filteredData.length}
             itemsPerPage={pageSize}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             alwaysShown={true}
           /></div>
-        
-        
-         
+
+
+
         </>
       }
       {/* <nav>

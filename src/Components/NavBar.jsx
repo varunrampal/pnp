@@ -25,6 +25,7 @@ const NavBar = () => {
                     <Link to={"/about"} state={{ hiddenParam: 'nobtn' }} class="nav-item nav-link">About</Link>
 
                     <Link to="/plants" class="nav-item nav-link">Plants</Link>
+                     {/* <Link to="/plantstest" class="nav-item nav-link">PlantsTest</Link> */}
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Sales</a>

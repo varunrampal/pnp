@@ -471,3 +471,133 @@ body {
   border-radius: 18px;
   border: 1px solid #cfcece;
 }
+
+
+.image-container {
+  text-align: center;
+  margin: 20px;
+}
+
+.image-wrapper {
+  overflow: hidden;
+  display: inline-block;
+  border-radius: 8px;
+}
+
+.zoom-image {
+  width: 100%;
+  max-width: 400px;
+  transition: transform 0.3s ease;
+  cursor: zoom-in;
+}
+
+.zoom-image:hover {
+  transform: scale(1.1);
+}
+
+.image-description {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.zoom-container {
+  text-align: center;
+  margin: 20px;
+}
+
+.zoomable-image {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  cursor: zoom-in;
+}
+
+.image-description {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #444;
+}
+
+.plant-name-link {
+  color: #4a7c59;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+  font-weight: 600;
+  font-size: 1.12rem;
+  padding-bottom: 2px;
+}
+
+.plant-name-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: currentColor;
+  transition: width 0.3s ease;
+}
+
+.plant-commanname {
+  color: #4a7c59;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+  font-weight: 500;
+  font-size: 1.25rem;
+  padding-bottom: 2px;
+}
+
+/* Desktop hover */
+@media (hover: hover) and (pointer: fine) {
+  .plant-name-link:hover {
+    color: #0F4229;
+  }
+
+  .plant-name-link:hover::after {
+    width: 100%;
+  }
+
+  .modal-description-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.modal-description-row {
+  margin-bottom: 20px;
+}
+
+/* First row is full width */
+.row-one {
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+/* Second row with two columns */
+.row-two {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Columns inside second row */
+.modal-description-column {
+  flex: 1;
+  min-width: 250px;
+  background-color: #e0e0ff;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Optional responsiveness */
+@media (max-width: 600px) {
+  .row-two {
+    flex-direction: column;
+  }
+}
+}

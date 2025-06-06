@@ -11,6 +11,7 @@ import Contact from './Pages/Contact';
 import SalesInfo from './Pages/SalesInfo';
 import Quote from './Pages/Quote';
 import Plants from './Pages/Plants';
+import TestPlantList from './Pages/testplantlist.jsx';
 import Whatsapp from './Components/Whatsapp.jsx';
 import AutoPopup from './Components/AutoPopup.jsx';
 
@@ -29,7 +30,9 @@ const App = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/Sales/Information" element={<SalesInfo />} />
             <Route path="/Quote" element={<Quote />} />   
-            <Route path="/Plants" element={<Plants />} />     
+            <Route path="/Plants" element={<Plants />} />  
+            <Route path="/Plantstest" element={<TestPlantList />} />  
+            plantstest   
           </Routes>
           <BottomFeatures/>
           <Footer/>
