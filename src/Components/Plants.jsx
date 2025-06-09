@@ -20,7 +20,7 @@ const Plants = () => {
         <div class="row g-4 portfolio-container">
             <div class="col-lg-4 col-md-6 portfolio-item first wow fadeInUp" data-wow-delay="0.1s">
                 <div class="portfolio-inner rounded">
-                    <img class="img-fluid" src="img/service-1.jpg" alt=""/>
+                    <img class="img-fluid" src="img/service-1.jpg" alt="Service Image"/>
                     <div class="portfolio-text">
                         <h4 class="text-white mb-4">Landscaping</h4>
                         <div class="d-flex">
@@ -32,7 +32,7 @@ const Plants = () => {
             </div>
             <div class="col-lg-4 col-md-6 portfolio-item second wow fadeInUp" data-wow-delay="0.3s">
                 <div class="portfolio-inner rounded">
-                    <img class="img-fluid" src="img/service-2.jpg" alt=""/>
+                    <img class="img-fluid" src="img/service-2.jpg" alt="Service Image2"/>
                     <div class="portfolio-text">
                         <h4 class="text-white mb-4">Pruning plants</h4>
                         <div class="d-flex">
@@ -44,7 +44,7 @@ const Plants = () => {
             </div>
             <div class="col-lg-4 col-md-6 portfolio-item first wow fadeInUp" data-wow-delay="0.5s">
                 <div class="portfolio-inner rounded">
-                    <img class="img-fluid" src="img/service-3.jpg" alt=""/>
+                    <img class="img-fluid" src="img/service-3.jpg" alt="service Image3"/>
                     <div class="portfolio-text">
                         <h4 class="text-white mb-4">Irrigation & Drainage</h4>
                         <div class="d-flex">
@@ -56,7 +56,7 @@ const Plants = () => {
             </div>
             <div class="col-lg-4 col-md-6 portfolio-item second wow fadeInUp" data-wow-delay="0.1s">
                 <div class="portfolio-inner rounded">
-                    <img class="img-fluid" src="img/service-4.jpg" alt=""/>
+                    <img class="img-fluid" src="img/service-4.jpg" alt="Service Image4"/>
                     <div class="portfolio-text">
                         <h4 class="text-white mb-4">Garden Maintenance</h4>
                         <div class="d-flex">
@@ -68,7 +68,7 @@ const Plants = () => {
             </div>
             <div class="col-lg-4 col-md-6 portfolio-item first wow fadeInUp" data-wow-delay="0.3s">
                 <div class="portfolio-inner rounded">
-                    <img class="img-fluid" src="img/service-5.jpg" alt=""/>
+                    <img class="img-fluid" src="img/service-5.jpg" alt="Service Image5"/>
                     <div class="portfolio-text">
                         <h4 class="text-white mb-4">Green Technology</h4>
                         <div class="d-flex">
@@ -80,7 +80,7 @@ const Plants = () => {
             </div>
             <div class="col-lg-4 col-md-6 portfolio-item second wow fadeInUp" data-wow-delay="0.5s">
                 <div class="portfolio-inner rounded">
-                    <img class="img-fluid" src="img/service-6.jpg" alt=""/>
+                    <img class="img-fluid" src="img/service-6.jpg" alt="Service Image6"/>
                     <div class="portfolio-text">
                         <h4 class="text-white mb-4">Urban Gardening</h4>
                         <div class="d-flex">

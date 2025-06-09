@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1,
+    "name": "Apple",
+    "category": "Fruit"
+  },
+  {
+    "id": 2,
+    "name": "Banana",
+    "category": "Fruit"
+  },
+  {
+    "id": 3,
+    "name": "Carrot",
+    "category": "Vegetable"
+  },
+  {
+    "id": 4,
+    "name": "Doughnut",
+    "category": "Dessert"
+  },
+  {
+    "id": 5,
+    "name": "Eggplant",
+    "category": "Vegetable"
+  },
+  {
+    "id": 6,
+    "name": "Fig",
+    "category": "Fruit"
+  },
+  {
+    "id": 7,
+    "name": "Grapes",
+    "category": "Fruit"
+  },
+  {
+    "id": 8,
+    "name": "Honeydew",
+    "category": "Fruit"
+  },
+  {
+    "id": 9,
+    "name": "Iceberg Lettuce",
+    "category": "Vegetable"
+  },
+  {
+    "id": 10,
+    "name": "Jalapeño",
+    "category": "Vegetable"
+  },
+  {
+    "id": 11,
+    "name": "Kiwi",
+    "category": "Fruit"
+  },
+  {
+    "id": 12,
+    "name": "Lemon",
+    "category": "Fruit"
+  },
+  {
+    "id": 13,
+    "name": "Mango",
+    "category": "Fruit"
+  },
+  {
+    "id": 14,
+    "name": "Nectarine",
+    "category": "Fruit"
+  },
+  {
+    "id": 15,
+    "name": "Orange",
+    "category": "Fruit"
+  },
+  {
+    "id": 16,
+    "name": "Papaya",
+    "category": "Fruit"
+  },
+  {
+    "id": 17,
+    "name": "Quinoa",
+    "category": "Grain"
+  },
+  {
+    "id": 18,
+    "name": "Radish",
+    "category": "Vegetable"
+  },
+  {
+    "id": 19,
+    "name": "Spinach",
+    "category": "Vegetable"
+  },
+  {
+    "id": 20,
+    "name": "Tomato",
+    "category": "Fruit"
+  },
+  {
+    "id": 21,
+    "name": "Ugli Fruit",
+    "category": "Fruit"
+  },
+  {
+    "id": 22,
+    "name": "Vanilla Bean",
+    "category": "Spice"
+  },
+  {
+    "id": 23,
+    "name": "Watermelon",
+    "category": "Fruit"
+  },
+  {
+    "id": 24,
+    "name": "Xigua",
+    "category": "Fruit"
+  },
+  {
+    "id": 25,
+    "name": "Yam",
+    "category": "Vegetable"
+  },
+  {
+    "id": 26,
+    "name": "Zucchini",
+    "category": "Vegetable"
+  },
+  {
+    "id": 27,
+    "name": "Almond",
+    "category": "Nut"
+  },
+  {
+    "id": 28,
+    "name": "Brazil Nut",
+    "category": "Nut"
+  },
+  {
+    "id": 29,
+    "name": "Cashew",
+    "category": "Nut"
+  },
+  {
+    "id": 30,
+    "name": "Date",
+    "category": "Fruit"
+  },
+  {
+    "id": 31,
+    "name": "Egg",
+    "category": "Protein"
+  },
+  {
+    "id": 32,
+    "name": "Fish",
+    "category": "Protein"
+  },
+  {
+    "id": 33,
+    "name": "Garlic",
+    "category": "Vegetable"
+  },
+  {
+    "id": 34,
+    "name": "Honey",
+    "category": "Sweetener"
+  },
+  {
+    "id": 35,
+    "name": "Ice Cream",
+    "category": "Dessert"
+  },
+  {
+    "id": 36,
+    "name": "Jelly",
+    "category": "Dessert"
+  },
+  {
+    "id": 37,
+    "name": "Kale",
+    "category": "Vegetable"
+  },
+  {
+    "id": 38,
+    "name": "Lentils",
+    "category": "Legume"
+  },
+  {
+    "id": 39,
+    "name": "Mushroom",
+    "category": "Vegetable"
+  },
+  {
+    "id": 40,
+    "name": "Nuts",
+    "category": "Nut"
+  }
+]

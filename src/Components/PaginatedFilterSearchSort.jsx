@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import ZoomImage from '../Components/ZoomImage ';
+import Modal from '../Components/Modal';
 
 const ITEMS_PER_PAGE = 12;
 
-const PaginatedFilterSearchSort = () => {
+const PaginatedFilterSearchSort = ({items}) => {
   const [allData, setAllData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [visibleData, setVisibleData] = useState([]);
@@ -10,17 +12,16 @@ const PaginatedFilterSearchSort = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [sortOption, setSortOption] = useState('name-asc');
+  const [activeItemId, setActiveItemId] = useState(null);
+  const openModal = (id) => setActiveItemId(id);
+  const closeModal = () => setActiveItemId(null);
+  
+    useEffect(() => {
+    setAllData(items);
+    setFilteredData(items);
+    setVisibleData(items.slice(0, ITEMS_PER_PAGE));
+    setCurrentIndex(ITEMS_PER_PAGE);
 
-  useEffect(() => {
-    fetch('/test.json')
-      .then(res => res.json())
-      .then(json => {
-        setAllData(json);
-        setFilteredData(json);
-        setVisibleData(json.slice(0, ITEMS_PER_PAGE));
-        setCurrentIndex(ITEMS_PER_PAGE);
-        console.log('Data loaded:', json);
-      });
   }, []);
 
   useEffect(() => {
@@ -28,22 +29,21 @@ const PaginatedFilterSearchSort = () => {
 
     // Filter by category
     if (categoryFilter !== 'All') {
-      filtered = filtered.filter(item => item.category === categoryFilter);
+      filtered = filtered.filter(item => item.Type === categoryFilter);
     }
 
     // Search by name
     if (searchTerm.trim()) {
       filtered = filtered.filter(item =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.CommanName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Sort data
     filtered.sort((a, b) => {
-      if (sortOption === 'name-asc') return a.name.localeCompare(b.name);
-      if (sortOption === 'name-desc') return b.name.localeCompare(a.name);
-      if (sortOption === 'id-asc') return a.id - b.id;
-      if (sortOption === 'id-desc') return b.id - a.id;
+      if (sortOption === 'name-asc') return a.Name.localeCompare(b.name);
+      if (sortOption === 'name-desc') return b.Name.localeCompare(a.name);
       return 0;
     });
 
@@ -58,15 +58,17 @@ const PaginatedFilterSearchSort = () => {
     setCurrentIndex(nextIndex);
   };
 
-  const uniqueCategories = ['All', ...new Set(allData.map(item => item.category))];
+  const uniqueCategories = ['All', ...new Set(allData.map(item => item.Type))];
 
   return (
     <>
-    <div className="container py-4">
-      <h2>Filter, Search & Sort List</h2>
-
-      {/* Controls: Search, Filter, Sort */}
-      <div className="row mb-4 g-3">
+       <div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container text-center py-5">
+          <h1 class="display-3 text-white mb-4 animated slideInDown">Our Plants</h1>
+        </div>
+      </div>
+      <div className="container">
+  <div className="row mb-4 g-3">
         <div className="col-md-4">
           <input
             type="text"
@@ -93,32 +95,67 @@ const PaginatedFilterSearchSort = () => {
             value={sortOption}
             onChange={e => setSortOption(e.target.value)}
           >
-            <option value="name-asc">Sort: Name A–Z</option>
+            <option value="name-asc">Sort: Name A–Z </option>
             <option value="name-desc">Sort: Name Z–A</option>
-            <option value="id-asc">Sort: ID ↑</option>
-            <option value="id-desc">Sort: ID ↓</option>
+        
           </select>
         </div>
       </div>
+        <div className="row">
+          {visibleData.map((plant, index) => (
+            <div className="col-md-3 mb-4" key={index}>
 
-      {/* List */}
-      <ul className="list-group">
-        {visibleData.map(item => (
-          <li key={item.id} className="list-group-item d-flex justify-content-between">
-            <span>{item.name}</span>
-            <small className="text-muted">{item.category}</small>
-          </li>
-        ))}
-      </ul>
+              <div className="plant-card">
 
-      {/* Load More */}
+                <ZoomImage
+                  src={plant.Imgpath} alt={plant.Name}
+                />
+
+                <a href="#" class="plant-name-link" onClick={(e) => { e.preventDefault(); openModal(index); }}>
+                  {plant.Name}
+                </a>
+                <p class="plant-commanname">{plant.CommanName}</p>
+                <p class="plant-category">{plant.Type}</p>
+                <Modal isOpen={activeItemId === index} onClose={closeModal}>
+                 
+
+                  <div class="container py-4">
+
+                    {/* <!-- Row 1: Full Width --> */}
+                    <div class="row mb-4">
+                      <div class="col">
+                        <div class="p-4">
+                           <h2>{plant.Name}</h2>
+                           <p>{plant.CommanName}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col">
+                        <div class="p-4">
+                           <p>{plant.Description}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                
+                </Modal>
+              </div>
+            </div>
+          ))}
+               {/* Load More */}
       {currentIndex < filteredData.length && (
+        <div class="center-button">
         <button className="btn btn-primary mt-3" onClick={loadMore}>
           Load More
         </button>
+        </div>
       )}
-    </div>
-    <div>asdsad</div>
+        </div>
+      </div>
+   
     </>
   );
 };

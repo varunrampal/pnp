@@ -21,7 +21,7 @@ const Carousel = () => {
             <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img class="w-100" src={image1} alt="Image" />
+                        <img class="w-100" src={image1} alt="Crousel Image1" />
                         <div class="carousel-caption">
                             <div class="container">
                                 <div class="row justify-content-center">
@@ -37,7 +37,7 @@ const Carousel = () => {
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img class="w-100" src={image2} alt="Image" />
+                        <img class="w-100" src={image2} alt="Crousel Image2" />
                         <div class="carousel-caption">
                             <div class="container">
                                 <div class="row justify-content-center">

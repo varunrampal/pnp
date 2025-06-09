@@ -600,4 +600,13 @@ body {
     flex-direction: column;
   }
 }
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh; /* Full viewport height, or adjust based on your layout */
+}
+
+
 }

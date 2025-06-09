@@ -12,7 +12,7 @@ const Services = () => {
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="service-item rounded d-flex h-100">
                         <div class="service-img rounded">
-                            <img class="img-fluid" src="img/service-1.jpg" alt=""/>
+                            <img class="img-fluid" src="img/service-1.jpg" alt="service-1"/>
                         </div>
                         <div class="service-text rounded p-5">
                             <div class="btn-square rounded-circle mx-auto mb-3">

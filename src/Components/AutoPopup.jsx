@@ -22,7 +22,7 @@ import roseImage from '../../public/images/plants/Rose-Magic-Meidiland.webp'; //
           <Popup open={open} closeOnDocumentClick onClose={closePopup} position="left bottom" contentStyle={{paddingTop:'20px', backgroundColor:'#ffffff'}}>
             
           <div  >
-          <img src={roseImage} alt="logo"style={{maxHeight: '100px', maxWidth:'100px'}} />
+          <img src={roseImage} alt="hot item"style={{maxHeight: '100px', maxWidth:'100px'}} />
           <h4>Rosa Nutkana on Sale - #1 for $4.50</h4>
           {/* <p>Contact us on info@peelsnativeplants.com or 604-217-13551</p> */}
           <p><a href="" className='btn btn-link'>Check our June Sale</a></p>
