@@ -39,7 +39,7 @@ const ContactUs = () => {
       <div class="row g-5">
           <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
               {/* <p class="fs-5 fw-bold text-primary">Contact Us</p> */}
-              <h1 class="display-5 mb-5">If You Have Any Query, Please Contact Us</h1>
+              <h1 class="display-5 mb-5">If You Have Any Query, Please Contact Peels Native Plants Ltd</h1>
               {/* <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p> */}
               <form class="formContainer" ref={form} onSubmit={sendEmail}>
                   <div class="row g-3">

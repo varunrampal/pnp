@@ -37,6 +37,7 @@ const NavBar = () => {
                     </div>
 
                     {/* <Link to="" class="nav-item nav-link" onClick={handleDownload}>Availability</Link> */}
+                       <Link to="/faq" class="nav-item nav-link">FAQ</Link>
                     <Link to="/contact" class="nav-item nav-link">Contact</Link>
                 </div>
                 <Link to="" class="btn btn-primary py-4 px-lg-4 rounded-0 d-none d-lg-block" style={{ marginRight: '2px' }} onClick={handleDownload}>Availability<i class="fa fa-download ms-3"></i></Link>
