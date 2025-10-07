@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem } from "../components/Accordion";
+import { Accordion, AccordionItem } from "./Accordion";
 export default function FaQ() {
  return (
     <Accordion>
