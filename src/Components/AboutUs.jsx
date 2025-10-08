@@ -25,7 +25,7 @@ const AboutUs = () => {
                     {/* <h1 class="display-1 text-primary mb-0">25</h1>
                     <p class="text-primary mb-4">Year of Experience</p> */}
                     <h1 class="display-5 mb-4">Grow with Peel Native Plants Ltd.!</h1>
-                    <p class="mb-4">Located in the heart of the Lower Mainland, Peel Native Plants Ltd. proudly specializes in the propagation and cultivation of top-quality BC native plants. Our plants are ideal for commercial and residential landscapes, habitat and wetland restoration, stream rehabilitation, mitigation projects, highways, parks, and more.
+                    <p class="mb-4">Located in Langley in the beautiful Fraser Valley, Peel Native Plants Ltd. proudly specializes in the propagation and cultivation of top-quality BC native plants. Our plants are ideal for commercial and residential landscapes, habitat and wetland restoration, stream rehabilitation, mitigation projects, highways, parks, and more.
 
 With one of the largest inventories in the region and unmatched growing capabilities, we are ready to supply all your wholesale native plant needs — big or small!
 
