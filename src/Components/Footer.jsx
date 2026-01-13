@@ -46,7 +46,7 @@ const Footer = () => {
             </div> */}
             <div class="col-lg-12 col-md-6">
                 <h4 class="text-white mb-4">Our Location</h4>
-                <iframe title="Peel Native Plants Location"  src="https://www.google.com/maps?q=22064+64+Ave,+Langley,+BC,+V2Y+2N8&amp;output=embed" width="100%" height="350" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style={{border:0}}></iframe>
+                <iframe title="Peel Native Plants Location"  src="https://www.google.com/maps?q=24095+65+Ave,+Langley+Twp,+BC,+V2Y+2H1&amp;output=embed" width="100%" height="350" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style={{border:0}}></iframe>
               
             </div>
         </div>
