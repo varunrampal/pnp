@@ -77,7 +77,7 @@ const ContactUs = () => {
           <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s" style={{minHeight:'450px', border:'0'}}>
               <div class="position-relative rounded overflow-hidden h-100">
                   <iframe class="position-relative w-100 h-100"
-                  title="Peel Native Plants Location"  src="https://www.google.com/maps?q=22064+64+Ave,+Langley,+BC,+V2Y+2N8&amp;output=embed"
+                  title="Peel Native Plants Location"  src="https://www.google.com/maps?q=24095+65+Ave,+Langley+Twp,+BC,+V2Y+2H1&amp;output=embed"
                   frameborder="0" style={{minHeight:'450px', border:'0'}} allowfullscreen="" aria-hidden="false"
                   tabindex="0"></iframe>
               </div>

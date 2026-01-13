@@ -16,7 +16,7 @@ const Footer = () => {
         <div class="row g-5">
             <div class="col-lg-8 col-md-6">
                 <h4 class="text-white mb-4">Our Office</h4>
-                <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>22064 64 Ave, Langley, BC, V2Y 2N8</p>
+                <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>24095 65 Ave, Langley Twp, BC, V2Y 2H1</p>
                 <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>604-217-1351</p>
                 <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@peelsnativeplants.com</p>
                 <div class="d-flex pt-2">
