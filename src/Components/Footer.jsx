@@ -1,0 +1,52 @@
+import React from 'react'
+import { Link } from 'react-router-dom';
+
+const availabilityUrl = '/files/PNP_Availability_List.xlsx';
+
+const Footer = () => {  
+  return (
+    <div class="container-fluid bg-dark text-light footer mt-5 py-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5">
+        <div class="row g-5">
+            <div class="col-lg-8 col-md-6">
+                <h4 class="text-white mb-4">Our Office</h4>
+                <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>24095 65 Ave, Langley Twp, BC, V2Y 2H1</p>
+                <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>604-217-1351</p>
+                <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@peelsnativeplants.com</p>
+                <div class="d-flex pt-2">
+                    <span class="btn btn-square btn-outline-light rounded-circle me-2" aria-hidden="true"><i class="fab fa-twitter"></i></span>
+                    <span class="btn btn-square btn-outline-light rounded-circle me-2" aria-hidden="true"><i class="fab fa-facebook-f"></i></span>
+                    <span class="btn btn-square btn-outline-light rounded-circle me-2" aria-hidden="true"><i class="fab fa-youtube"></i></span>
+                    <span class="btn btn-square btn-outline-light rounded-circle me-2" aria-hidden="true"><i class="fab fa-linkedin-in"></i></span>
+                </div>
+            </div>
+           
+            <div class="col-lg-3 col-md-6">
+                <h4 class="text-white mb-4">Quick Links</h4>
+                <Link to="/" class="btn btn-link">Home</Link>
+                <Link to="/about" class="btn btn-link">About</Link>
+                <Link to="/contact" class="btn btn-link">Contact</Link>
+                <Link to="/quote" class="btn btn-link">Get A Quote</Link>
+                <Link to="/sales/information" class="btn btn-link">Sales Information</Link>
+                <Link to="/plants" class="btn btn-link">Plants</Link>
+                <a href={availabilityUrl} download class="btn btn-link">Availability List</a>
+            </div>
+            {/* <div class="col-lg-3 col-md-6">
+            <h4 class="text-white mb-4">Our Location</h4>
+            <div class="map-container">
+                <iframe title="Peel Native Plants Location"  src="https://www.google.com/maps?q=22064+64+Ave,+Langley,+BC,+V2Y+2N8&amp;output=embed" width="100%" height="250" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style={{border:0}}></iframe>
+                
+                </div>
+            </div> */}
+            <div class="col-lg-12 col-md-6">
+                <h4 class="text-white mb-4">Our Location</h4>
+                <iframe title="Peels Native Plants Location"  src="https://www.google.com/maps?q=24095+65+Ave,+Langley+Twp,+BC,+V2Y+2H1&amp;output=embed" width="100%" height="350" loading="lazy" referrerPolicy="no-referrer-when-downgrade" style={{border:0}}></iframe>
+              
+            </div>
+        </div>
+    </div>
+</div>
+  )
+}
+
+export default Footer

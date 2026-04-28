@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /files/desktop.ini
+Sitemap: https://www.peelsnativeplants.com/sitemap.xml
