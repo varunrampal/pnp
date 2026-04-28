@@ -153,6 +153,12 @@ const savePlantToFile = async (plant, imageData) => {
     throw new Error(result.error || 'Unable to save plant changes.');
   }
 
+  if (!result.plant?.slug) {
+    throw new Error(
+      'Plant save endpoint did not return the saved plant. Restart the Vite dev server and try again.',
+    );
+  }
+
   return result.plant;
 };
 
@@ -537,7 +543,7 @@ const Admin = () => {
     setPlants((currentPlants) =>
       sortedPlants(
         currentPlants.map((plant) =>
-          plant.slug === savedPlant.slug ? savedPlant : plant,
+          plant?.slug === savedPlant.slug ? savedPlant : plant,
         ),
       ),
     );
