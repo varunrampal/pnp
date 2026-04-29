@@ -7,6 +7,8 @@ const ADMIN_PLANTS_API = '/api/admin/plants';
 const DEFAULT_IMAGE = '/images/plants/thujaplicata.jpg';
 const IMAGE_MAX_DIMENSION = 1200;
 const IMAGE_QUALITY = 0.78;
+const LIVE_ADMIN_SAVE_ERROR =
+  'Admin save is not available on the live static site. Render Static Sites cannot write images or update PlantsList.json. Deploy this project as a Node Web Service with a real API, or make plant edits locally and redeploy.';
 
 const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'Green@35444';
@@ -147,6 +149,12 @@ const savePlantToFile = async (plant, imageData) => {
       imageData,
     }),
   });
+  const contentType = response.headers.get('content-type') || '';
+
+  if (!contentType.includes('application/json')) {
+    throw new Error(LIVE_ADMIN_SAVE_ERROR);
+  }
+
   const result = await response.json().catch(() => ({}));
 
   if (!response.ok) {
@@ -154,9 +162,7 @@ const savePlantToFile = async (plant, imageData) => {
   }
 
   if (!result.plant?.slug) {
-    throw new Error(
-      'Plant save endpoint did not return the saved plant. Restart the Vite dev server and try again.',
-    );
+    throw new Error(LIVE_ADMIN_SAVE_ERROR);
   }
 
   return result.plant;

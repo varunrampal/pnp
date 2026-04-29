@@ -5552,9 +5552,10 @@
         "Uses": "Landscaping, gardens",
         "Name": "Abies Balsamea",
         "SunMoisture": "Full sun to partial shade, average soil",
-        "Imgpath": "./images/plants/default.jpg",
+        "Imgpath": "./images/plants/abies-balsamea.webp",
         "RestorationValue": "Medium - provides habitat and aesthetics",
-        "MatureSize": "Varies by variety"
+        "MatureSize": "Varies by variety",
+        "Description": ""
     },
     {
         "slug": "acer-macrophyllum",

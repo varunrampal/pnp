@@ -78,77 +78,80 @@ const parseImageDataUrl = (imageData) => {
   }
 }
 
+const addAdminPlantWriterMiddleware = (server) => {
+  const root = server.config.root
+  const plantsJsonPath = path.resolve(root, 'src/json/PlantsList.json')
+  const plantsImagesDir = path.resolve(root, 'public/images/plants')
+
+  server.middlewares.use(async (req, res, next) => {
+    const url = new URL(req.url || '/', 'http://localhost')
+    const match = url.pathname.match(/^\/api\/admin\/plants\/([^/]+)$/)
+
+    if (!match) {
+      next()
+      return
+    }
+
+    if (req.method !== 'POST') {
+      sendJson(res, 405, { error: 'Method not allowed.' })
+      return
+    }
+
+    try {
+      const slug = decodeURIComponent(match[1])
+
+      if (!/^[a-z0-9-]+$/i.test(slug)) {
+        throw new Error('Invalid plant slug.')
+      }
+
+      const body = await readJsonBody(req)
+      const plants = await readJsonFile(plantsJsonPath)
+      const plantIndex = plants.findIndex((plant) => plant.slug === slug)
+
+      if (plantIndex === -1) {
+        sendJson(res, 404, { error: 'Plant not found.' })
+        return
+      }
+
+      const nextPlant = { ...plants[plantIndex] }
+      const plantUpdates = body.plant || {}
+
+      editablePlantFields.forEach((field) => {
+        if (Object.prototype.hasOwnProperty.call(plantUpdates, field)) {
+          nextPlant[field] = plantUpdates[field]
+        }
+      })
+
+      if (body.imageData) {
+        const { buffer, extension } = parseImageDataUrl(body.imageData)
+        const imageName = `${slug}.${extension}`
+        const imagePath = path.resolve(plantsImagesDir, imageName)
+
+        if (!imagePath.startsWith(`${plantsImagesDir}${path.sep}`)) {
+          throw new Error('Invalid image path.')
+        }
+
+        await fs.mkdir(plantsImagesDir, { recursive: true })
+        await fs.writeFile(imagePath, buffer)
+        nextPlant.Imgpath = `./images/plants/${imageName}`
+      }
+
+      plants[plantIndex] = nextPlant
+      await fs.writeFile(plantsJsonPath, `${JSON.stringify(plants, null, 4)}\n`)
+
+      sendJson(res, 200, { plant: nextPlant })
+    } catch (error) {
+      sendJson(res, 400, {
+        error: error.message || 'Unable to save plant.',
+      })
+    }
+  })
+}
+
 const adminPlantWriter = () => ({
   name: 'admin-plant-writer',
-  configureServer(server) {
-    const root = server.config.root
-    const plantsJsonPath = path.resolve(root, 'src/json/PlantsList.json')
-    const plantsImagesDir = path.resolve(root, 'public/images/plants')
-
-    server.middlewares.use(async (req, res, next) => {
-      const url = new URL(req.url || '/', 'http://localhost')
-      const match = url.pathname.match(/^\/api\/admin\/plants\/([^/]+)$/)
-
-      if (!match) {
-        next()
-        return
-      }
-
-      if (req.method !== 'POST') {
-        sendJson(res, 405, { error: 'Method not allowed.' })
-        return
-      }
-
-      try {
-        const slug = decodeURIComponent(match[1])
-
-        if (!/^[a-z0-9-]+$/i.test(slug)) {
-          throw new Error('Invalid plant slug.')
-        }
-
-        const body = await readJsonBody(req)
-        const plants = await readJsonFile(plantsJsonPath)
-        const plantIndex = plants.findIndex((plant) => plant.slug === slug)
-
-        if (plantIndex === -1) {
-          sendJson(res, 404, { error: 'Plant not found.' })
-          return
-        }
-
-        const nextPlant = { ...plants[plantIndex] }
-        const plantUpdates = body.plant || {}
-
-        editablePlantFields.forEach((field) => {
-          if (Object.prototype.hasOwnProperty.call(plantUpdates, field)) {
-            nextPlant[field] = plantUpdates[field]
-          }
-        })
-
-        if (body.imageData) {
-          const { buffer, extension } = parseImageDataUrl(body.imageData)
-          const imageName = `${slug}.${extension}`
-          const imagePath = path.resolve(plantsImagesDir, imageName)
-
-          if (!imagePath.startsWith(`${plantsImagesDir}${path.sep}`)) {
-            throw new Error('Invalid image path.')
-          }
-
-          await fs.mkdir(plantsImagesDir, { recursive: true })
-          await fs.writeFile(imagePath, buffer)
-          nextPlant.Imgpath = `./images/plants/${imageName}`
-        }
-
-        plants[plantIndex] = nextPlant
-        await fs.writeFile(plantsJsonPath, `${JSON.stringify(plants, null, 4)}\n`)
-
-        sendJson(res, 200, { plant: nextPlant })
-      } catch (error) {
-        sendJson(res, 400, {
-          error: error.message || 'Unable to save plant.',
-        })
-      }
-    })
-  },
+  configureServer: addAdminPlantWriterMiddleware,
+  configurePreviewServer: addAdminPlantWriterMiddleware,
 })
 
 // https://vite.dev/config/
