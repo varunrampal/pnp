@@ -33,7 +33,9 @@ const PlantDetail = () => {
           <p><strong>Category:</strong> {plant.Type}</p>
           <p><strong>Uses:</strong> {plant.Uses}</p>
           <p><strong>Mature Size:</strong> {plant.MatureSize}</p>
-          <p><strong>Sun/Moisture Needs:</strong> {plant.SunMoisture}</p>
+          <p><strong>Sun:</strong> {plant.Sun}</p>
+          <p><strong>Soil:</strong> {plant.Soil}</p>
+          <p><strong>Moisture:</strong> {plant.Moisture}</p>
           <p><strong>Restoration Value:</strong> {plant.RestorationValue}</p>
           {plant.Description && <p><strong>Description:</strong> {plant.Description}</p>}
           {/* <div className="mt-4">

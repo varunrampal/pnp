@@ -20,6 +20,13 @@ const routeMeta = {
     keywords:
       'BC plant availability, wholesale native plants, native trees BC, native shrubs BC, restoration nursery Langley',
   },
+  '/plant-advisor': {
+    title: 'Plant Advisor | Peels Native Plants Ltd.',
+    description:
+      'Mark a planting area on Google Maps and review plant recommendations from Peels Native Plants based on the selected site area.',
+    keywords:
+      'plant advisor BC, native plant recommendations, planting area map, Peels Native Plants advisor',
+  },
   '/about': {
     title: 'About Peels Native Plants Ltd. | Langley Native Plant Nursery',
     description:
@@ -167,6 +174,7 @@ const breadcrumbSchema = (path, meta) => {
   const labels = {
     '/': 'Home',
     '/plants': 'Plants',
+    '/plant-advisor': 'Plant Advisor',
     '/about': 'About',
     '/sales/information': 'Sales Information',
     '/faq': 'FAQ',

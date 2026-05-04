@@ -17,10 +17,24 @@ const editableFields = [
   { name: 'Name', label: 'Plant Name', type: 'input' },
   { name: 'CommanName', label: 'Common Name', type: 'input' },
   { name: 'Type', label: 'Type', type: 'input' },
+  {
+    name: 'IsAdvisable',
+    label: 'Plant Advisor',
+    type: 'checkbox',
+    help: 'Show in Plant Advisor recommendations',
+  },
+  {
+    name: 'IsOrnamental',
+    label: 'Ornamental',
+    type: 'checkbox',
+    help: 'Include when the advisor goal is Ornamental',
+  },
   { name: 'Imgpath', label: 'Image Path', type: 'input' },
   { name: 'Uses', label: 'Uses', type: 'textarea' },
   { name: 'MatureSize', label: 'Mature Size', type: 'textarea' },
-  { name: 'SunMoisture', label: 'Sun/Moisture', type: 'textarea' },
+  { name: 'Sun', label: 'Sun', type: 'textarea' },
+  { name: 'Soil', label: 'Soil', type: 'textarea' },
+  { name: 'Moisture', label: 'Moisture', type: 'textarea' },
   { name: 'RestorationValue', label: 'Restoration Value', type: 'textarea' },
   { name: 'Description', label: 'Description', type: 'textarea' },
 ];
@@ -49,6 +63,12 @@ const handleImageError = (event) => {
 };
 
 const safeText = (value) => String(value || '').toLowerCase();
+
+const isPlantAdvisable = (plant) =>
+  plant.IsAdvisable !== false && safeText(plant.IsAdvisable) !== 'false';
+
+const isPlantOrnamental = (plant) =>
+  plant.IsOrnamental === true || safeText(plant.IsOrnamental) === 'true';
 
 const formatBytes = (bytes) => {
   if (!Number.isFinite(bytes) || bytes <= 0) return '0 B';
@@ -246,7 +266,15 @@ const PlantManagement = ({ plants, onLogout }) => {
     if (!query) return plants;
 
     return plants.filter((plant) =>
-      [plant.Name, plant.CommanName, plant.Type, plant.id].some((value) =>
+      [
+        plant.Name,
+        plant.CommanName,
+        plant.Type,
+        plant.Sun,
+        plant.Soil,
+        plant.Moisture,
+        plant.id,
+      ].some((value) =>
         safeText(value).includes(query),
       ),
     );
@@ -290,6 +318,7 @@ const PlantManagement = ({ plants, onLogout }) => {
             <span>Image</span>
             <span>Plant Name</span>
             <span>Type</span>
+            <span>Advisor</span>
             <span>Action</span>
           </div>
 
@@ -311,6 +340,13 @@ const PlantManagement = ({ plants, onLogout }) => {
                 </span>
               </div>
               <span className="admin-plant-type">{plant.Type || 'Uncategorized'}</span>
+              <span
+                className={`admin-advisor-badge ${
+                  isPlantAdvisable(plant) ? 'enabled' : 'disabled'
+                }`}
+              >
+                {isPlantAdvisable(plant) ? 'Yes' : 'No'}
+              </span>
               <Link className="admin-edit-link" to={`/admin/plants/${plant.slug}/edit`}>
                 Edit
               </Link>
@@ -330,7 +366,7 @@ const missingPlantForm = () =>
   editableFields.reduce(
     (fields, field) => ({
       ...fields,
-      [field.name]: '',
+      [field.name]: field.type === 'checkbox' ? true : '',
     }),
     {},
   );
@@ -339,7 +375,12 @@ const plantFormData = (plant) =>
   editableFields.reduce(
     (fields, field) => ({
       ...fields,
-      [field.name]: plant[field.name] || '',
+      [field.name]:
+        field.type === 'checkbox'
+          ? field.name === 'IsOrnamental'
+            ? isPlantOrnamental(plant)
+            : isPlantAdvisable(plant)
+          : plant[field.name] || '',
     }),
     missingPlantForm(),
   );
@@ -352,8 +393,11 @@ const PlantEdit = ({ onLogout, onSave, plant }) => {
   const previewImage = pendingImage?.dataUrl || imagePath(formData.Imgpath);
 
   const updateField = (event) => {
-    const { name, value } = event.target;
-    setFormData((current) => ({ ...current, [name]: value }));
+    const { checked, name, type, value } = event.target;
+    setFormData((current) => ({
+      ...current,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
   };
 
   const handleImageUpload = async (event) => {
@@ -452,7 +496,24 @@ const PlantEdit = ({ onLogout, onSave, plant }) => {
                   <label className="form-label" htmlFor={`plant-${field.name}`}>
                     {field.label}
                   </label>
-                  {field.type === 'textarea' ? (
+                  {field.type === 'checkbox' ? (
+                    <div className="form-check admin-checkbox-field">
+                      <input
+                        checked={Boolean(formData[field.name])}
+                        className="form-check-input"
+                        id={`plant-${field.name}`}
+                        name={field.name}
+                        onChange={updateField}
+                        type="checkbox"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor={`plant-${field.name}`}
+                      >
+                        {field.help}
+                      </label>
+                    </div>
+                  ) : field.type === 'textarea' ? (
                     <textarea
                       className="form-control"
                       id={`plant-${field.name}`}
