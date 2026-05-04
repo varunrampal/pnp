@@ -1399,8 +1399,8 @@ const PlantAdvisor = () => {
                   type="button"
                 >
                   <i className="fa fa-draw-polygon me-2" aria-hidden="true"></i>
-                  {isDrawingBoundary ? 'Done Drawing' : 'Draw Areahoyhous'}
- north vancouver
+                  {isDrawingBoundary ? 'Done Drawing' : 'Draw Area'}
+
                 </button>
                 <button
                   className="btn btn-outline-secondary"
