@@ -8,8 +8,89 @@ const DEFAULT_ADDRESS = '24095 65 Ave, Langley Township, BC';
 const DEFAULT_IMAGE = '/images/plants/thujaplicata.jpg';
 const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-js-api';
 const SQUARE_FEET_PER_SQUARE_METER = 10.7639;
+const SLOPE_EROSION_PERCENT = 8;
+const BRITISH_COLUMBIA_MAP_BOUNDS = {
+  north: 60.1,
+  south: 48.2,
+  east: -114,
+  west: -139.2,
+};
+const BRITISH_COLUMBIA_MIN_ZOOM = 6;
 
 let googleMapsApiPromise;
+
+const WATER_CONTEXT_TERMS = [
+  'bank',
+  'bay',
+  'beach',
+  'canal',
+  'creek',
+  'ditch',
+  'floodplain',
+  'lake',
+  'marsh',
+  'pond',
+  'river',
+  'shore',
+  'slough',
+  'stream',
+  'wetland',
+];
+
+const LOWER_MAINLAND_TERMS = [
+  'abbotsford',
+  'aldergrove',
+  'burnaby',
+  'chilliwack',
+  'coquitlam',
+  'delta',
+  'fraser valley',
+  'langley',
+  'maple ridge',
+  'mission',
+  'new westminster',
+  'north vancouver',
+  'pitt meadows',
+  'port coquitlam',
+  'port moody',
+  'richmond',
+  'surrey',
+  'vancouver',
+  'west vancouver',
+  'white rock',
+];
+
+const VANCOUVER_ISLAND_TERMS = [
+  'campbell river',
+  'comox',
+  'cowichan',
+  'duncan',
+  'ladysmith',
+  'nanaimo',
+  'parksville',
+  'port alberni',
+  'saanich',
+  'sidney',
+  'vancouver island',
+  'victoria',
+];
+
+const BC_INTERIOR_TERMS = [
+  'cache creek',
+  'kamloops',
+  'kelowna',
+  'kootenay',
+  'merritt',
+  'okanagan',
+  'oliver',
+  'osoyoos',
+  'penticton',
+  'prince george',
+  'revelstoke',
+  'salmon arm',
+  'vernon',
+  'williams lake',
+];
 
 const DEFAULT_SITE_CONDITIONS = {
   sunlight: 'any',
@@ -93,19 +174,6 @@ const SITE_CONDITION_FIELDS = [
     ],
   },
 ];
-
-const GOAL_FIELD = {
-  name: 'projectGoal',
-  label: 'Goal',
-  options: [
-    { value: 'any', label: 'Any goal' },
-    { value: 'restoration', label: 'Restoration' },
-    { value: 'wildlife', label: 'Wildlife habitat' },
-    { value: 'screening', label: 'Screening/privacy' },
-    { value: 'ornamental', label: 'Ornamental' },
-    { value: 'groundcover', label: 'Groundcover' },
-  ],
-};
 
 const SORT_OPTIONS = [
   { value: 'best', label: 'Best match' },
@@ -216,6 +284,10 @@ const geocoderStatusMessage = (status) => {
     return 'Google Maps had a temporary address lookup error. Please try again.';
   }
 
+  if (status === 'OUTSIDE_BC') {
+    return 'Enter an address in British Columbia, Canada. Locations in other provinces or countries are not available.';
+  }
+
   return 'Address was not found. Try adding city, province, and postal code.';
 };
 
@@ -226,20 +298,44 @@ const geocodeCandidate = (geocoder, request) =>
     });
   });
 
+const addressComponent = (result, type) =>
+  result?.address_components?.find((component) => component.types.includes(type));
+
+const isBritishColumbiaAddress = (result) => {
+  const province = addressComponent(result, 'administrative_area_level_1');
+  const country = addressComponent(result, 'country');
+  const provinceText = safeText([province?.short_name, province?.long_name].join(' '));
+
+  return (
+    safeText(country?.short_name) === 'ca' &&
+    (provinceText.includes('bc') || provinceText.includes('british columbia'))
+  );
+};
+
 const findAddressResult = async (geocoder, addressValue) => {
   let lastStatus = 'ZERO_RESULTS';
 
   for (const candidate of addressSearchCandidates(addressValue)) {
     const { results, status } = await geocodeCandidate(geocoder, {
       address: candidate,
-      componentRestrictions: { country: 'CA' },
+      componentRestrictions: {
+        administrativeArea: 'BC',
+        country: 'CA',
+      },
       region: 'ca',
     });
 
     lastStatus = status;
 
-    if (status === 'OK' && results?.[0]) {
-      return { result: results[0], status };
+    if (status === 'OK' && results?.length) {
+      const britishColumbiaResult = results.find(isBritishColumbiaAddress);
+
+      if (britishColumbiaResult) {
+        return { result: britishColumbiaResult, status };
+      }
+
+      lastStatus = 'OUTSIDE_BC';
+      continue;
     }
 
     if (status !== 'ZERO_RESULTS') {
@@ -338,45 +434,282 @@ const matchesRegionFilter = (plant, regionFilter) => {
 const optionLabel = (field, value) =>
   field?.options.find((option) => option.value === value)?.label || value;
 
-const normalizeGoal = (value) => safeText(value) || 'any';
+const siteConditionField = (name) =>
+  SITE_CONDITION_FIELDS.find((field) => field.name === name);
 
-const goalMatchesPlant = (plant, goal) => {
-  const activeGoal = normalizeGoal(goal);
-  const type = safeText(plant.Type);
-  const restorationValue = safeText(plant.RestorationValue);
-  const siteText = plantSiteText(plant);
-
-  if (activeGoal === 'any') {
-    return true;
+const getBoundaryCentroid = (points) => {
+  if (!points.length) {
+    return DEFAULT_CENTER;
   }
 
-  if (activeGoal === 'ornamental') {
-    return isOrnamentalPlant(plant);
+  let twiceArea = 0;
+  let latTotal = 0;
+  let lngTotal = 0;
+
+  points.forEach((point, index) => {
+    const nextPoint = points[(index + 1) % points.length];
+    const cross = point.lng * nextPoint.lat - nextPoint.lng * point.lat;
+
+    twiceArea += cross;
+    latTotal += (point.lat + nextPoint.lat) * cross;
+    lngTotal += (point.lng + nextPoint.lng) * cross;
+  });
+
+  if (Math.abs(twiceArea) < 0.00000001) {
+    return {
+      lat: points.reduce((total, point) => total + point.lat, 0) / points.length,
+      lng: points.reduce((total, point) => total + point.lng, 0) / points.length,
+    };
   }
 
-  if (activeGoal === 'restoration') {
-    return (
-      restorationValue.includes('high') ||
-      hasAny(siteText, ['restoration', 'native species'])
+  return {
+    lat: latTotal / (3 * twiceArea),
+    lng: lngTotal / (3 * twiceArea),
+  };
+};
+
+const toRadians = (degrees) => (degrees * Math.PI) / 180;
+
+const distanceBetweenPoints = (start, end) => {
+  const earthRadiusMeters = 6371000;
+  const latDelta = toRadians(end.lat - start.lat);
+  const lngDelta = toRadians(end.lng - start.lng);
+  const startLat = toRadians(start.lat);
+  const endLat = toRadians(end.lat);
+  const haversine =
+    Math.sin(latDelta / 2) ** 2 +
+    Math.cos(startLat) * Math.cos(endLat) * Math.sin(lngDelta / 2) ** 2;
+
+  return (
+    earthRadiusMeters *
+    2 *
+    Math.atan2(Math.sqrt(haversine), Math.sqrt(Math.max(1 - haversine, 0)))
+  );
+};
+
+const reverseGeocodeLocation = (geocoder, location) =>
+  new Promise((resolve) => {
+    if (!geocoder) {
+      resolve(null);
+      return;
+    }
+
+    geocoder.geocode({ location }, (results, status) => {
+      resolve(status === 'OK' && results?.[0] ? results[0] : null);
+    });
+  });
+
+const describeAddressResult = (result) =>
+  [
+    result?.formatted_address,
+    ...(result?.address_components || []).flatMap((component) => [
+      component.long_name,
+      component.short_name,
+    ]),
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+const getElevationProfile = (google, points, centroid) =>
+  new Promise((resolve) => {
+    if (!google?.maps?.ElevationService) {
+      resolve(null);
+      return;
+    }
+
+    const locations = [...points, centroid].map(
+      (point) => new google.maps.LatLng(point.lat, point.lng),
     );
+    const elevationService = new google.maps.ElevationService();
+
+    elevationService.getElevationForLocations({ locations }, (results, status) => {
+      if (status !== 'OK' || !results?.length) {
+        resolve(null);
+        return;
+      }
+
+      const elevations = results
+        .map((result) => result.elevation)
+        .filter((elevation) => Number.isFinite(elevation));
+
+      if (elevations.length < 2) {
+        resolve(null);
+        return;
+      }
+
+      const elevationChangeMeters = Math.max(...elevations) - Math.min(...elevations);
+      const boundaryDiameterMeters = points.reduce(
+        (longestDistance, point) =>
+          Math.max(longestDistance, distanceBetweenPoints(point, centroid) * 2),
+        1,
+      );
+
+      resolve({
+        elevationChangeMeters,
+        slopePercent: (elevationChangeMeters / boundaryDiameterMeters) * 100,
+      });
+    });
+  });
+
+const inferRegionClimate = (centroid, addressText) => {
+  const text = safeText(addressText);
+
+  if (
+    hasAny(text, VANCOUVER_ISLAND_TERMS) ||
+    (centroid.lat >= 48 &&
+      centroid.lat <= 51 &&
+      centroid.lng >= -126.5 &&
+      centroid.lng <= -123)
+  ) {
+    return 'vancouver-island';
   }
 
-  if (activeGoal === 'wildlife') {
-    return hasAny(siteText, ['wildlife', 'habitat', 'birds', 'food source']);
+  if (
+    hasAny(text, LOWER_MAINLAND_TERMS) ||
+    (centroid.lat >= 48.6 &&
+      centroid.lat <= 50.6 &&
+      centroid.lng >= -123.8 &&
+      centroid.lng <= -121)
+  ) {
+    return 'lower-mainland';
   }
 
-  if (activeGoal === 'screening') {
-    return (
-      hasAny(siteText, ['evergreen', 'shelter']) ||
-      hasAny(siteText, ['screen', 'privacy', 'hedge'])
-    );
+  if (
+    hasAny(text, BC_INTERIOR_TERMS) ||
+    centroid.lng > -121 ||
+    (centroid.lat > 50.5 && centroid.lng > -123.5)
+  ) {
+    return 'bc-interior';
   }
 
-  if (activeGoal === 'groundcover') {
-    return type.includes('perennial') || siteText.includes('groundcover');
+  return 'coastal';
+};
+
+const inferSlope = ({ addressText, elevationProfile }) => {
+  const text = safeText(addressText);
+
+  if (hasAny(text, WATER_CONTEXT_TERMS)) {
+    return 'riparian';
   }
 
-  return true;
+  if (
+    elevationProfile?.slopePercent >= SLOPE_EROSION_PERCENT ||
+    (elevationProfile?.elevationChangeMeters >= 4 &&
+      elevationProfile?.slopePercent >= 5)
+  ) {
+    return 'erosion';
+  }
+
+  return 'flat';
+};
+
+const inferMoisture = ({ areaProfile, regionClimate, slope }) => {
+  if (slope === 'riparian') {
+    return 'wet';
+  }
+
+  if (slope === 'erosion' || regionClimate === 'bc-interior') {
+    return 'dry';
+  }
+
+  if (regionClimate === 'lower-mainland' && areaProfile.key !== 'compact') {
+    return 'moist';
+  }
+
+  if (regionClimate === 'coastal' || regionClimate === 'vancouver-island') {
+    return 'moist';
+  }
+
+  return 'average';
+};
+
+const inferSoil = ({ moisture, regionClimate, slope }) => {
+  if (slope === 'riparian' || moisture === 'wet') {
+    return 'clay';
+  }
+
+  if (slope === 'erosion' || regionClimate === 'bc-interior') {
+    return 'sandy';
+  }
+
+  if (regionClimate === 'lower-mainland') {
+    return 'clay';
+  }
+
+  return 'well-drained';
+};
+
+const inferSunlight = ({ areaProfile, moisture, slope }) => {
+  if (slope === 'riparian' || moisture === 'wet' || areaProfile.key === 'compact') {
+    return 'part-shade';
+  }
+
+  return 'full-sun';
+};
+
+const inferIrrigation = (moisture) => {
+  if (moisture === 'dry') {
+    return 'none';
+  }
+
+  if (moisture === 'wet') {
+    return 'regular';
+  }
+
+  return 'moderate';
+};
+
+const buildAutoConditionSummary = ({ elevationProfile, regionClimate, slope }) => {
+  const regionLabel = REGION_FILTER_LABELS[regionClimate] || 'Selected region';
+  const slopeLabel = optionLabel(siteConditionField('slope'), slope);
+
+  if (elevationProfile?.slopePercent) {
+    return `${regionLabel}; ${slopeLabel}; ${elevationProfile.slopePercent.toFixed(
+      1,
+    )}% grade estimate`;
+  }
+
+  return `${regionLabel}; ${slopeLabel}`;
+};
+
+const estimateSiteConditionsFromBoundary = async ({
+  areaSquareFeet,
+  boundaryPoints,
+  fallbackAddress,
+  geocoder,
+  google,
+}) => {
+  const centroid = getBoundaryCentroid(boundaryPoints);
+  const [addressResult, elevationProfile] = await Promise.all([
+    reverseGeocodeLocation(geocoder, centroid),
+    getElevationProfile(google, boundaryPoints, centroid),
+  ]);
+  const addressText = [describeAddressResult(addressResult), fallbackAddress]
+    .filter(Boolean)
+    .join(' ');
+  const areaProfile = getAreaProfile(areaSquareFeet);
+  const regionClimate = inferRegionClimate(centroid, addressText);
+  const slope = inferSlope({ addressText, elevationProfile });
+  const moisture = inferMoisture({ areaProfile, regionClimate, slope });
+  const soil = inferSoil({ moisture, regionClimate, slope });
+  const sunlight = inferSunlight({ areaProfile, moisture, slope });
+  const irrigation = inferIrrigation(moisture);
+
+  return {
+    conditions: {
+      sunlight,
+      moisture,
+      soil,
+      regionClimate,
+      slope,
+      irrigation,
+    },
+    summary: buildAutoConditionSummary({
+      elevationProfile,
+      regionClimate,
+      slope,
+    }),
+  };
 };
 
 const sortRecommendations = (recommendations, sortBy) =>
@@ -415,6 +748,8 @@ const matchesSiteConditions = (plant, conditions) => {
   const moistureText = plantMoistureText(plant);
   const conditionText = plantConditionText(plant);
   const siteText = plantSiteText(plant);
+  const hasModerateIrrigation =
+    conditions.irrigation === 'moderate' || conditions.irrigation === 'occasional';
 
   const hasFullSun = sunText.includes('full sun');
   const hasPartShade = hasAny(sunText, ['part shade', 'partial shade']);
@@ -519,7 +854,7 @@ const matchesSiteConditions = (plant, conditions) => {
   }
 
   if (
-    conditions.irrigation === 'occasional' &&
+    hasModerateIrrigation &&
     !hasAny(conditionText, ['adaptable', 'average', 'well-drained'])
   ) {
     return false;
@@ -582,6 +917,8 @@ const scorePlant = (plant, profile, conditions) => {
   const matureHeight = parseMatureHeight(plant.MatureSize);
   const reasons = [];
   let score = 0;
+  const hasModerateIrrigation =
+    conditions.irrigation === 'moderate' || conditions.irrigation === 'occasional';
 
   if (restorationValue.includes('high')) {
     score += 3;
@@ -719,10 +1056,10 @@ const scorePlant = (plant, profile, conditions) => {
     }
   }
 
-  if (conditions.irrigation === 'occasional') {
+  if (hasModerateIrrigation) {
     if (hasAny(siteText, ['adaptable', 'average', 'well-drained'])) {
       score += 1;
-      addReason(reasons, 'Occasional irrigation fit');
+      addReason(reasons, 'Moderate irrigation fit');
     }
   }
 
@@ -852,6 +1189,9 @@ const PlantAdvisor = () => {
   const geocoderRef = useRef(null);
   const mapClickListenerRef = useRef(null);
   const isDrawingBoundaryRef = useRef(false);
+  const conditionEstimateRequestRef = useRef(0);
+  const manualConditionRevisionRef = useRef(0);
+  const siteConditionSourceRef = useRef('default');
   const [address, setAddress] = useState('');
   const [resolvedAddress, setResolvedAddress] = useState('');
   const [boundaryPoints, setBoundaryPoints] = useState([]);
@@ -861,7 +1201,10 @@ const PlantAdvisor = () => {
   const [isSearchingAddress, setIsSearchingAddress] = useState(false);
   const [isDrawingBoundary, setIsDrawingBoundary] = useState(false);
   const [siteConditions, setSiteConditions] = useState(DEFAULT_SITE_CONDITIONS);
-  const [selectedGoal, setSelectedGoal] = useState('any');
+  const [autoSiteConditions, setAutoSiteConditions] = useState(null);
+  const [autoConditionSummary, setAutoConditionSummary] = useState('');
+  const [conditionEstimateStatus, setConditionEstimateStatus] = useState('idle');
+  const [siteConditionSource, setSiteConditionSource] = useState('default');
   const [sortBy, setSortBy] = useState('best');
   const [selectedPlantKeys, setSelectedPlantKeys] = useState([]);
   const [selectedPlantQuantities, setSelectedPlantQuantities] = useState({});
@@ -886,6 +1229,11 @@ const PlantAdvisor = () => {
           fullscreenControl: true,
           mapTypeControl: true,
           mapTypeId: 'satellite',
+          minZoom: BRITISH_COLUMBIA_MIN_ZOOM,
+          restriction: {
+            latLngBounds: BRITISH_COLUMBIA_MAP_BOUNDS,
+            strictBounds: true,
+          },
           streetViewControl: false,
           zoom: 13,
         });
@@ -1044,24 +1392,83 @@ const PlantAdvisor = () => {
   const drawingHint = boundaryPoints.length
     ? 'Drag numbered points to adjust. Click a point to remove it.'
     : 'Start by clicking points on the map.';
-  const activeGoal = normalizeGoal(selectedGoal);
+
+  useEffect(() => {
+    const requestId = conditionEstimateRequestRef.current + 1;
+    conditionEstimateRequestRef.current = requestId;
+
+    if (!hasMarkedArea) {
+      setConditionEstimateStatus('idle');
+      setAutoSiteConditions(null);
+      setAutoConditionSummary('');
+
+      return undefined;
+    }
+
+    const manualRevisionAtStart = manualConditionRevisionRef.current;
+    let cancelled = false;
+
+    setConditionEstimateStatus('estimating');
+
+    const estimateTimer = window.setTimeout(() => {
+      estimateSiteConditionsFromBoundary({
+        areaSquareFeet,
+        boundaryPoints,
+        fallbackAddress: resolvedAddress || address,
+        geocoder: geocoderRef.current,
+        google: window.google,
+      })
+        .then(({ conditions, summary }) => {
+          if (cancelled || conditionEstimateRequestRef.current !== requestId) {
+            return;
+          }
+
+          setAutoSiteConditions(conditions);
+          setAutoConditionSummary(summary);
+          setConditionEstimateStatus('ready');
+
+          if (
+            manualConditionRevisionRef.current === manualRevisionAtStart &&
+            siteConditionSourceRef.current !== 'manual'
+          ) {
+            setSiteConditions(conditions);
+            siteConditionSourceRef.current = 'auto';
+            setSiteConditionSource('auto');
+          }
+        })
+        .catch(() => {
+          if (cancelled || conditionEstimateRequestRef.current !== requestId) {
+            return;
+          }
+
+          setConditionEstimateStatus('error');
+        });
+    }, 450);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(estimateTimer);
+    };
+  }, [
+    address,
+    areaSquareFeet,
+    boundaryPoints,
+    hasMarkedArea,
+    resolvedAddress,
+  ]);
+
   const effectiveSiteConditions = useMemo(
     () => ({
       ...siteConditions,
-      projectGoal: activeGoal,
+      projectGoal: 'any',
     }),
-    [activeGoal, siteConditions],
+    [siteConditions],
   );
-  const selectedGoalLabel = optionLabel(GOAL_FIELD, activeGoal);
   const activeConditionCount = SITE_CONDITION_FIELDS.filter(
     (field) => siteConditions[field.name] !== 'any',
-  ).length + (activeGoal !== 'any' ? 1 : 0);
+  ).length;
   const activeFilterChips = useMemo(() => {
     const chips = [];
-
-    if (activeGoal !== 'any') {
-      chips.push({ label: GOAL_FIELD.label, value: selectedGoalLabel });
-    }
 
     SITE_CONDITION_FIELDS.forEach((field) => {
       const value = siteConditions[field.name];
@@ -1072,19 +1479,14 @@ const PlantAdvisor = () => {
     });
 
     return chips;
-  }, [activeGoal, selectedGoalLabel, siteConditions]);
+  }, [siteConditions]);
   const reportConditions = useMemo(
-    () => [
-      ...SITE_CONDITION_FIELDS.map((field) => ({
+    () =>
+      SITE_CONDITION_FIELDS.map((field) => ({
         label: field.label,
         value: optionLabel(field, siteConditions[field.name]),
       })),
-      {
-        label: GOAL_FIELD.label,
-        value: optionLabel(GOAL_FIELD, activeGoal),
-      },
-    ],
-    [activeGoal, siteConditions],
+    [siteConditions],
   );
 
   const visibleRecommendations = useMemo(() => {
@@ -1106,12 +1508,8 @@ const PlantAdvisor = () => {
   }, [areaProfile, effectiveSiteConditions, hasMarkedArea]);
 
   const renderedRecommendations = useMemo(
-    () =>
-      sortRecommendations(
-        visibleRecommendations.filter(({ plant }) => goalMatchesPlant(plant, activeGoal)),
-        sortBy,
-      ),
-    [activeGoal, sortBy, visibleRecommendations],
+    () => sortRecommendations(visibleRecommendations, sortBy),
+    [sortBy, visibleRecommendations],
   );
   const renderedPlantKeys = useMemo(
     () => new Set(renderedRecommendations.map(({ plant }) => plantKey(plant))),
@@ -1160,10 +1558,7 @@ const PlantAdvisor = () => {
   const matchCountLabel = `${renderedRecommendations.length} ${
     renderedRecommendations.length === 1 ? 'plant' : 'plants'
   }`;
-  const resultHeading =
-    activeGoal === 'any'
-      ? 'All matches for this area'
-      : `${selectedGoalLabel} matches for this area`;
+  const resultHeading = 'All matches for this area';
   const resultCountLabel = `${renderedRecommendations.length} matching ${
     renderedRecommendations.length === 1 ? 'plant' : 'plants'
   }`;
@@ -1176,6 +1571,18 @@ const PlantAdvisor = () => {
   const displayCountLabel = isExportingSelected ? selectedCountLabel : resultCountLabel;
   const quantityForPlant = (plant) => selectedPlantQuantities[plantKey(plant)] || '1';
   const sizeForPlant = (plant) => selectedPlantSizes[plantKey(plant)] || PLANT_SIZE_OPTIONS[0];
+  const canApplyAutoSiteConditions =
+    Boolean(autoSiteConditions) && siteConditionSource !== 'auto';
+  const conditionEstimateLabel =
+    conditionEstimateStatus === 'estimating'
+      ? 'Estimating area filters...'
+      : conditionEstimateStatus === 'error'
+        ? 'Area filter estimate unavailable'
+        : siteConditionSource === 'manual'
+          ? 'Manual filters active'
+          : siteConditionSource === 'auto'
+            ? 'Filters auto-selected from area'
+            : 'Area filters ready';
 
   const handleAddressSearch = async (event) => {
     event.preventDefault();
@@ -1205,6 +1612,11 @@ const PlantAdvisor = () => {
       markerRef.current.setPosition(location);
       setResolvedAddress(result.formatted_address);
       setBoundaryPoints([]);
+      setAutoSiteConditions(null);
+      setAutoConditionSummary('');
+      setConditionEstimateStatus('idle');
+      siteConditionSourceRef.current = 'default';
+      setSiteConditionSource('default');
       isDrawingBoundaryRef.current = false;
       setIsDrawingBoundary(false);
     } catch {
@@ -1230,6 +1642,11 @@ const PlantAdvisor = () => {
 
     isDrawingBoundaryRef.current = true;
     setBoundaryPoints([]);
+    setAutoSiteConditions(null);
+    setAutoConditionSummary('');
+    setConditionEstimateStatus('idle');
+    siteConditionSourceRef.current = 'default';
+    setSiteConditionSource('default');
     setIsDrawingBoundary(true);
   };
 
@@ -1239,39 +1656,48 @@ const PlantAdvisor = () => {
 
   const clearBoundary = () => {
     setBoundaryPoints([]);
+    setAutoSiteConditions(null);
+    setAutoConditionSummary('');
+    setConditionEstimateStatus('idle');
+    siteConditionSourceRef.current = 'default';
+    setSiteConditionSource('default');
     isDrawingBoundaryRef.current = false;
     setIsDrawingBoundary(false);
   };
 
   const updateSiteCondition = (name, value) => {
+    manualConditionRevisionRef.current += 1;
+    siteConditionSourceRef.current = 'manual';
+    setSiteConditionSource('manual');
     setSiteConditions((currentConditions) => ({
       ...currentConditions,
       [name]: value,
     }));
   };
 
+  const applyAutoSiteConditions = () => {
+    if (!autoSiteConditions) {
+      return;
+    }
+
+    setSiteConditions(autoSiteConditions);
+    siteConditionSourceRef.current = 'auto';
+    setSiteConditionSource('auto');
+  };
+
   const resetFilters = () => {
+    manualConditionRevisionRef.current += 1;
     setSiteConditions(DEFAULT_SITE_CONDITIONS);
-    setSelectedGoal('any');
+    siteConditionSourceRef.current = 'default';
+    setSiteConditionSource('default');
     setSortBy('best');
     setSelectedPlantKeys([]);
     setSelectedPlantQuantities({});
     setSelectedPlantSizes({});
   };
 
-  const updateSelectedGoal = (event) => {
-    setSelectedGoal(normalizeGoal(event.target.value));
-  };
-
   const updateSort = (event) => {
     setSortBy(event.target.value);
-  };
-
-  const syncSelectedGoal = (event) => {
-    const select = event.currentTarget;
-    window.setTimeout(() => {
-      setSelectedGoal(normalizeGoal(select.value));
-    }, 0);
   };
 
   const togglePlantSelection = (plant) => {
@@ -1362,7 +1788,7 @@ const PlantAdvisor = () => {
                     className="form-control"
                     id="advisor-address"
                     onChange={(event) => setAddress(event.target.value)}
-                    placeholder="Enter planting location"
+                    placeholder="Enter planting location in British Columbia"
                     type="text"
                     value={address}
                   />
@@ -1435,38 +1861,41 @@ const PlantAdvisor = () => {
             <div className="advisor-panel">
               <div className="advisor-panel-head">
                 <p className="advisor-eyebrow">Site Conditions</p>
-                <button
-                  className="btn btn-outline-secondary btn-sm"
-                  disabled={!activeConditionCount && sortBy === 'best'}
-                  onClick={resetFilters}
-                  type="button"
-                >
-                  Reset filters
-                </button>
-              </div>
-              <div className="advisor-condition-grid">
-                <div className="advisor-condition-field">
-                  <label className="form-label" htmlFor="advisor-projectGoal">
-                    {GOAL_FIELD.label}
-                  </label>
-                  <select
-                    className="form-select"
-                    id="advisor-projectGoal"
-                    name={GOAL_FIELD.name}
-                    onBlur={syncSelectedGoal}
-                    onChange={updateSelectedGoal}
-                    onClick={syncSelectedGoal}
-                    onInput={updateSelectedGoal}
-                    onKeyUp={syncSelectedGoal}
-                    value={activeGoal}
+                <div className="advisor-panel-actions">
+                  <button
+                    className="btn btn-outline-primary btn-sm"
+                    disabled={
+                      !canApplyAutoSiteConditions ||
+                      conditionEstimateStatus === 'estimating'
+                    }
+                    onClick={applyAutoSiteConditions}
+                    type="button"
                   >
-                    {GOAL_FIELD.options.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                    <i className="fa fa-map-marked-alt me-1" aria-hidden="true"></i>
+                    Area filters
+                  </button>
+                  <button
+                    className="btn btn-outline-secondary btn-sm"
+                    disabled={!activeConditionCount && sortBy === 'best'}
+                    onClick={resetFilters}
+                    type="button"
+                  >
+                    <i className="fa fa-sync-alt me-1" aria-hidden="true"></i>
+                    Reset
+                  </button>
                 </div>
+              </div>
+              {conditionEstimateStatus !== 'idle' && (
+                <div
+                  className={`advisor-auto-status ${
+                    siteConditionSource === 'manual' ? 'is-manual' : ''
+                  } ${conditionEstimateStatus === 'error' ? 'is-error' : ''}`}
+                >
+                  <span>{conditionEstimateLabel}</span>
+                  {autoConditionSummary && <strong>{autoConditionSummary}</strong>}
+                </div>
+              )}
+              <div className="advisor-condition-grid">
                 {SITE_CONDITION_FIELDS.map((field) => (
                   <div className="advisor-condition-field" key={field.name}>
                     <label className="form-label" htmlFor={`advisor-${field.name}`}>
@@ -1524,10 +1953,6 @@ const PlantAdvisor = () => {
                 <span>Matches</span>
                 <strong>{hasMarkedArea ? matchCountLabel : 'Pending'}</strong>
               </div>
-              <div>
-                <span>Selected Goal</span>
-                <strong>{selectedGoalLabel}</strong>
-              </div>
             </div>
           </div>
 
@@ -1564,7 +1989,7 @@ const PlantAdvisor = () => {
           </div>
         </section>
 
-        <section className="advisor-results" data-active-goal={activeGoal}>
+        <section className="advisor-results">
           <div className="advisor-results-head">
             <div>
               <p className="advisor-eyebrow">Recommended Plants</p>
@@ -1702,7 +2127,7 @@ const PlantAdvisor = () => {
             </div>
           ) : recommendationsForDisplay.length ? (
             <div className="advisor-recommendation-grid">
-              {recommendationsForDisplay.map(({ plant, reasons, score }) => {
+              {recommendationsForDisplay.map(({ plant }) => {
                 const isSelected = selectedPlantKeySet.has(plantKey(plant));
 
                 return (

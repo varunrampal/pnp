@@ -976,6 +976,13 @@ body {
   justify-content: space-between;
 }
 
+.advisor-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
 .advisor-eyebrow {
   color: #348e38;
   font-size: 0.82rem;
@@ -1029,6 +1036,43 @@ body {
 .advisor-filter-chips span.muted {
   background: #f4f7f5;
   color: #69746e;
+}
+
+.advisor-auto-status {
+  background: #f7fbf8;
+  border: 1px solid #dce8df;
+  border-radius: 8px;
+  color: #0f4229;
+  margin: 12px 0 14px;
+  padding: 10px 12px;
+}
+
+.advisor-auto-status span,
+.advisor-auto-status strong {
+  display: block;
+  line-height: 1.3;
+}
+
+.advisor-auto-status span {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.advisor-auto-status strong {
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.advisor-auto-status.is-manual {
+  background: #fff8e6;
+  border-color: #f2dfad;
+}
+
+.advisor-auto-status.is-error {
+  background: #f8d7da;
+  border-color: #f1aeb5;
+  color: #842029;
 }
 
 .advisor-actions {
