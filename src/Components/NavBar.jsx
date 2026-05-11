@@ -18,8 +18,10 @@ const NavBar = () => {
 
                     <Link to={"/about"} state={{ hiddenParam: 'nobtn' }} class="nav-item nav-link">About</Link>
 
-                    <Link to="/plants" class="nav-item nav-link">Plants</Link>
+                    <Link to="/plants" class="nav-item nav-link">Our Plants</Link>
                     <Link to="/plant-advisor" class="nav-item nav-link">Plant Advisor</Link>
+                    <Link to="/satellite-site-analysis" class="nav-item nav-link">Site Analysis</Link>
+                    <Link to="/climate-resilience-selector" class="nav-item nav-link">Eco Adapt</Link>
                      {/* <Link to="/plantstest" class="nav-item nav-link">PlantsTest</Link> */}
                       {/* <Link to="/dragdrop" class="nav-item nav-link">DragDrop</Link> */}
 

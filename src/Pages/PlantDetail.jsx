@@ -25,7 +25,7 @@ const PlantDetail = () => {
       </div>
       <div className="row">
         <div className="col-md-6">
-          <ZoomImage src={'.' + plant.Imgpath} alt={plant.Name} />
+          <ZoomImage src={plant.Imgpath} alt={plant.Name} />
         </div>
         <div className="col-md-6">
           <h2>{plant.Name}</h2>

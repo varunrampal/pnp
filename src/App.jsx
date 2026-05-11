@@ -15,6 +15,8 @@ const SalesInfo = lazy(() => import('./Pages/SalesInfo'));
 const Quote = lazy(() => import('./Pages/Quote'));
 const Plants = lazy(() => import('./Pages/Plants'));
 const PlantAdvisor = lazy(() => import('./Pages/PlantAdvisor'));
+const SatelliteSiteAnalysis = lazy(() => import('./Pages/SatelliteSiteAnalysis'));
+const ClimateResilienceSelector = lazy(() => import('./Pages/ClimateResilienceSelector'));
 const FAQPage = lazy(() => import('./Pages/FaqPage'));
 const DragDrop = lazy(() => import('./Pages/DragDrop'));
 const PlantDetail = lazy(() => import('./Pages/PlantDetail'));
@@ -51,6 +53,8 @@ const App = () => {
             <Route path="/quote" element={<Quote />} />   
             <Route path="/plants" element={<Plants />} />
             <Route path="/plant-advisor" element={<PlantAdvisor />} />
+            <Route path="/satellite-site-analysis" element={<SatelliteSiteAnalysis />} />
+            <Route path="/climate-resilience-selector" element={<ClimateResilienceSelector />} />
             <Route path="/plant/:slug" element={<PlantDetail />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/plants/:slug/edit" element={<Admin />} />

@@ -5,7 +5,7 @@ import plants from '../json/PlantsList.json';
 const ADVISOR_FIELD = 'IsAdvisable';
 const DEFAULT_CENTER = { lat: 49.1209, lng: -122.57 };
 const DEFAULT_ADDRESS = '24095 65 Ave, Langley Township, BC';
-const DEFAULT_IMAGE = '/images/plants/thujaplicata.jpg';
+const DEFAULT_IMAGE = '/images/plants/default.jpg';
 const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-js-api';
 const SQUARE_FEET_PER_SQUARE_METER = 10.7639;
 const SLOPE_EROSION_PERCENT = 8;
@@ -350,6 +350,266 @@ const imagePath = (path) => {
   if (!path || path.includes('default.jpg')) return DEFAULT_IMAGE;
   return path.replace(/^\.?\//, '/');
 };
+
+const handleImageError = (event) => {
+  if (event.currentTarget.src.endsWith(DEFAULT_IMAGE)) return;
+
+  event.currentTarget.src = DEFAULT_IMAGE;
+};
+
+const escapeHtml = (value) =>
+  String(value ?? '').replace(/[&<>"']/g, (character) => {
+    const entities = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+    };
+
+    return entities[character];
+  });
+
+const buildPlantAdvisorExportHtml = ({
+  activeConditionCount,
+  addressLabel,
+  areaLabel,
+  generatedDate,
+  plantsForExport,
+  reportConditions,
+  selectedCountLabel,
+}) => `
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Selected Plant Advisor PDF</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        color: #26342d;
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 28px;
+      }
+      .export-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+      }
+      button {
+        background: #348e38;
+        border: 0;
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 10px 14px;
+      }
+      header {
+        border-bottom: 3px solid #0f4229;
+        margin-bottom: 18px;
+        padding-bottom: 14px;
+      }
+      .eyebrow {
+        color: #348e38;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0;
+        margin: 0 0 4px;
+        text-transform: uppercase;
+      }
+      h1 {
+        color: #0f4229;
+        font-size: 28px;
+        line-height: 1.2;
+        margin: 0 0 6px;
+      }
+      .summary {
+        color: #69746e;
+        font-size: 14px;
+        margin: 0;
+      }
+      .details {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-bottom: 18px;
+      }
+      .detail {
+        background: #f7fbf8;
+        border: 1px solid #dce8df;
+        border-radius: 8px;
+        padding: 10px;
+      }
+      .detail span {
+        color: #69746e;
+        display: block;
+        font-size: 11px;
+        font-weight: 800;
+        margin-bottom: 3px;
+        text-transform: uppercase;
+      }
+      .detail strong {
+        color: #0f4229;
+        display: block;
+        font-size: 14px;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+      .plant-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .plant-card {
+        border: 1px solid #dce8df;
+        border-radius: 8px;
+        break-inside: avoid;
+        overflow: hidden;
+        padding: 10px;
+      }
+      h2 {
+        color: #0f4229;
+        font-size: 17px;
+        line-height: 1.25;
+        margin: 0 0 4px;
+      }
+      .common-name {
+        color: #69746e;
+        font-size: 13px;
+        margin: 0 0 8px;
+      }
+      .plant-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+      .plant-meta span {
+        background: #e8f5e9;
+        border-radius: 999px;
+        color: #0f4229;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 4px 7px;
+      }
+      .request-grid {
+        display: grid;
+        gap: 6px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .request-grid div {
+        background: #f7fbf8;
+        border-radius: 6px;
+        padding: 7px 8px;
+      }
+      .request-grid span {
+        color: #69746e;
+        display: block;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      .request-grid strong {
+        color: #26342d;
+        font-size: 14px;
+      }
+      @media (max-width: 760px) {
+        body { padding: 16px; }
+        .details,
+        .plant-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media print {
+        body { padding: 0; }
+        .export-actions { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="export-actions">
+      <button onclick="window.print()">Print / Save PDF</button>
+    </div>
+    <header>
+      <p class="eyebrow">Peels Native Plants Ltd.</p>
+      <h1>Selected Plant Advisor PDF</h1>
+      <p class="summary">${escapeHtml(selectedCountLabel)}${
+        generatedDate ? ` - Generated ${escapeHtml(generatedDate)}` : ''
+      }</p>
+    </header>
+    <section class="details" aria-label="Project details">
+      <div class="detail">
+        <span>Address</span>
+        <strong>${escapeHtml(addressLabel)}</strong>
+      </div>
+      <div class="detail">
+        <span>Area</span>
+        <strong>${escapeHtml(areaLabel)}</strong>
+      </div>
+      ${reportConditions
+        .map(
+          (condition) => `
+            <div class="detail">
+              <span>${escapeHtml(condition.label)}</span>
+              <strong>${escapeHtml(condition.value)}</strong>
+            </div>
+          `,
+        )
+        .join('')}
+      <div class="detail">
+        <span>Active Filters</span>
+        <strong>${escapeHtml(activeConditionCount)}</strong>
+      </div>
+    </section>
+    <section class="plant-grid" aria-label="Selected plants">
+      ${plantsForExport
+        .map(
+          (plant) => `
+            <article class="plant-card">
+              <div>
+                <h2>${escapeHtml(plant.name)}</h2>
+                <p class="common-name">${escapeHtml(plant.commonName || 'No common name')}</p>
+                <div class="plant-meta">
+                  <span>${escapeHtml(plant.type || 'Uncategorized')}</span>
+                </div>
+                <div class="request-grid">
+                  <div>
+                    <span>Quantity</span>
+                    <strong>${escapeHtml(plant.quantity)}</strong>
+                  </div>
+                  <div>
+                    <span>Size</span>
+                    <strong>${escapeHtml(plant.size)}</strong>
+                  </div>
+                </div>
+              </div>
+            </article>
+          `,
+        )
+        .join('')}
+    </section>
+    <script>
+      const printWhenReady = () => {
+        window.setTimeout(() => {
+          window.focus();
+          window.print();
+        }, 300);
+      };
+
+      if (document.readyState === 'complete') {
+        printWhenReady();
+      } else {
+        window.addEventListener('load', printWhenReady, { once: true });
+      }
+    </script>
+  </body>
+</html>
+`;
 
 const parseMatureHeight = (matureSize) => {
   const match = String(matureSize || '').match(
@@ -1760,10 +2020,37 @@ const PlantAdvisor = () => {
       return;
     }
 
-    setIsExportingSelected(true);
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => window.print());
+    const printWindow = window.open('', '_blank');
+
+    if (!printWindow) {
+      setIsExportingSelected(true);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => window.print());
+      });
+      return;
+    }
+
+    const plantsForExport = selectedRecommendations.map(({ plant }) => ({
+      commonName: plant.CommanName,
+      name: plant.Name,
+      quantity: quantityForPlant(plant),
+      size: sizeForPlant(plant),
+      type: plant.Type,
+    }));
+    const html = buildPlantAdvisorExportHtml({
+      activeConditionCount,
+      addressLabel: resolvedAddress || address || 'Not set',
+      areaLabel: areaSquareFeet ? `${numberFormatter.format(areaSquareFeet)} sq ft` : 'Pending',
+      generatedDate: new Date().toLocaleDateString('en-CA'),
+      plantsForExport,
+      reportConditions,
+      selectedCountLabel,
     });
+
+    printWindow.opener = null;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
   };
 
   return (
@@ -2139,6 +2426,7 @@ const PlantAdvisor = () => {
                     <img
                       alt={plant.Name}
                       loading="lazy"
+                      onError={handleImageError}
                       src={imagePath(plant.Imgpath)}
                     />
                     <div className="advisor-plant-body">

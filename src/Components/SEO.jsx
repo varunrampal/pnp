@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import plants from '../json/PlantsList.json';
 
 const SITE_URL = 'https://www.peelsnativeplants.com';
-const DEFAULT_IMAGE = `${SITE_URL}/images/plants/thujaplicata.jpg`;
+const DEFAULT_IMAGE = `${SITE_URL}/images/plants/default.jpg`;
 
 const routeMeta = {
   '/': {
@@ -26,6 +26,20 @@ const routeMeta = {
       'Mark a planting area on Google Maps and review plant recommendations from Peels Native Plants based on the selected site area.',
     keywords:
       'plant advisor BC, native plant recommendations, planting area map, Peels Native Plants advisor',
+  },
+  '/satellite-site-analysis': {
+    title: 'Satellite Site Analysis | Peels Native Plants Ltd.',
+    description:
+      'Drop a pin on a satellite map to estimate slope, vegetation density, nearby water, sun exposure, elevation, and BC native plant recommendations.',
+    keywords:
+      'satellite site analysis BC, native plant recommendations, slope vegetation water elevation plant advisor',
+  },
+  '/climate-resilience-selector': {
+    title: 'Climate Resilience Plant Selector | Peels Native Plants Ltd.',
+    description:
+      'Select BC native and climate-adapted plants by city, soil type, and exposure for drought, flood, heat, and 2040 climate resilience planning.',
+    keywords:
+      'climate resilient plants BC, drought tolerant natives, flood resistant plants, heat resilient native plants, climate adapted planting mixes',
   },
   '/about': {
     title: 'About Peels Native Plants Ltd. | Langley Native Plant Nursery',
@@ -175,6 +189,8 @@ const breadcrumbSchema = (path, meta) => {
     '/': 'Home',
     '/plants': 'Plants',
     '/plant-advisor': 'Plant Advisor',
+    '/satellite-site-analysis': 'Satellite Site Analysis',
+    '/climate-resilience-selector': 'Climate Resilience Plant Selector',
     '/about': 'About',
     '/sales/information': 'Sales Information',
     '/faq': 'FAQ',

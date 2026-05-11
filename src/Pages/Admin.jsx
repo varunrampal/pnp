@@ -1,14 +1,16 @@
 import { useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import plantsData from '../json/PlantsList.json';
 
 const ADMIN_SESSION_KEY = 'pnp-admin-authenticated';
 const ADMIN_PLANTS_API = '/api/admin/plants';
-const DEFAULT_IMAGE = '/images/plants/thujaplicata.jpg';
+const DEFAULT_IMAGE = '/images/plants/default.jpg';
 const IMAGE_MAX_DIMENSION = 1200;
 const IMAGE_QUALITY = 0.78;
 const LIVE_ADMIN_SAVE_ERROR =
   'Admin save is not available on the live static site. Render Static Sites cannot write images or update PlantsList.json. Deploy this project as a Node Web Service with a real API, or make plant edits locally and redeploy.';
+const LIVE_ADMIN_DELETE_ERROR =
+  'Admin delete is not available on the live static site. Render Static Sites cannot remove images or update PlantsList.json. Deploy this project as a Node Web Service with a real API, or make plant edits locally and redeploy.';
 
 const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'Green@35444';
@@ -158,6 +160,20 @@ const compressImageFile = async (file) => {
 const sortedPlants = (plants) =>
   [...plants].sort((a, b) => a.Name.localeCompare(b.Name));
 
+const plantRecordKey = (plant) => `${plant.slug}-${plant.id ?? plant.Name}`;
+
+const plantEditPath = (plant) => {
+  const path = `/admin/plants/${plant.slug}/edit`;
+
+  return plant.id == null ? path : `${path}?id=${encodeURIComponent(plant.id)}`;
+};
+
+const isSamePlantRecord = (plant, targetPlant) =>
+  plant.slug === targetPlant.slug &&
+  (targetPlant.id == null
+    ? plant.Name === targetPlant.Name
+    : String(plant.id) === String(targetPlant.id));
+
 const savePlantToFile = async (plant, imageData) => {
   const response = await fetch(`${ADMIN_PLANTS_API}/${encodeURIComponent(plant.slug)}`, {
     method: 'POST',
@@ -183,6 +199,35 @@ const savePlantToFile = async (plant, imageData) => {
 
   if (!result.plant?.slug) {
     throw new Error(LIVE_ADMIN_SAVE_ERROR);
+  }
+
+  return result.plant;
+};
+
+const deletePlantFromFile = async (plant) => {
+  const response = await fetch(`${ADMIN_PLANTS_API}/${encodeURIComponent(plant.slug)}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: plant.id,
+    }),
+  });
+  const contentType = response.headers.get('content-type') || '';
+
+  if (!contentType.includes('application/json')) {
+    throw new Error(LIVE_ADMIN_DELETE_ERROR);
+  }
+
+  const result = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(result.error || 'Unable to delete plant.');
+  }
+
+  if (!result.plant?.slug) {
+    throw new Error(LIVE_ADMIN_DELETE_ERROR);
   }
 
   return result.plant;
@@ -257,7 +302,9 @@ const LoginForm = ({ onLogin }) => {
   );
 };
 
-const PlantManagement = ({ plants, onLogout }) => {
+const PlantManagement = ({ onDelete, plants, onLogout }) => {
+  const [deleteStatus, setDeleteStatus] = useState({ state: 'idle', message: '' });
+  const [deletingPlantKey, setDeletingPlantKey] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredPlants = useMemo(() => {
@@ -279,6 +326,33 @@ const PlantManagement = ({ plants, onLogout }) => {
       ),
     );
   }, [plants, searchTerm]);
+
+  const handleDelete = async (plant) => {
+    const confirmed = window.confirm(
+      `Delete ${plant.Name}? This will remove the plant record and its saved image if no other plant uses it.`,
+    );
+
+    if (!confirmed) return;
+
+    const rowKey = plantRecordKey(plant);
+    setDeletingPlantKey(rowKey);
+    setDeleteStatus({ state: 'loading', message: `Deleting ${plant.Name}...` });
+
+    try {
+      await onDelete(plant);
+      setDeleteStatus({
+        state: 'success',
+        message: `${plant.Name} was deleted.`,
+      });
+    } catch (error) {
+      setDeleteStatus({
+        state: 'error',
+        message: error.message || 'Unable to delete plant.',
+      });
+    } finally {
+      setDeletingPlantKey('');
+    }
+  };
 
   return (
     <>
@@ -312,6 +386,11 @@ const PlantManagement = ({ plants, onLogout }) => {
             {filteredPlants.length} of {plants.length}
           </span>
         </div>
+        {deleteStatus.message && (
+          <div className={`admin-delete-status ${deleteStatus.state}`}>
+            {deleteStatus.message}
+          </div>
+        )}
 
         <div className="admin-plant-list">
           <div className="admin-plant-list-head">
@@ -319,11 +398,11 @@ const PlantManagement = ({ plants, onLogout }) => {
             <span>Plant Name</span>
             <span>Type</span>
             <span>Advisor</span>
-            <span>Action</span>
+            <span>Actions</span>
           </div>
 
           {filteredPlants.map((plant) => (
-            <div className="admin-plant-row" key={plant.slug}>
+            <div className="admin-plant-row" key={plantRecordKey(plant)}>
               <img
                 alt={plant.Name}
                 className="admin-plant-thumb"
@@ -347,9 +426,19 @@ const PlantManagement = ({ plants, onLogout }) => {
               >
                 {isPlantAdvisable(plant) ? 'Yes' : 'No'}
               </span>
-              <Link className="admin-edit-link" to={`/admin/plants/${plant.slug}/edit`}>
-                Edit
-              </Link>
+              <div className="admin-row-actions">
+                <Link className="admin-edit-link" to={plantEditPath(plant)}>
+                  Edit
+                </Link>
+                <button
+                  className="admin-delete-link"
+                  disabled={deletingPlantKey === plantRecordKey(plant)}
+                  onClick={() => handleDelete(plant)}
+                  type="button"
+                >
+                  {deletingPlantKey === plantRecordKey(plant) ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
             </div>
           ))}
 
@@ -571,13 +660,20 @@ const AdminNotFound = ({ onLogout }) => (
 const Admin = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
+  const [searchParams] = useSearchParams();
+  const selectedPlantId = searchParams.get('id');
   const [isAuthenticated, setIsAuthenticated] = useState(readSession);
   const [plants, setPlants] = useState(() => sortedPlants(plantsData));
 
-  const selectedPlant = useMemo(
-    () => plants.find((plant) => plant.slug === slug),
-    [plants, slug],
-  );
+  const selectedPlant = useMemo(() => {
+    if (!slug) return null;
+
+    const matchingPlants = plants.filter((plant) => plant.slug === slug);
+
+    if (!selectedPlantId) return matchingPlants[0];
+
+    return matchingPlants.find((plant) => String(plant.id) === selectedPlantId);
+  }, [plants, selectedPlantId, slug]);
 
   const handleLogin = ({ username, password }) => {
     const didLogin = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
@@ -610,11 +706,21 @@ const Admin = () => {
     setPlants((currentPlants) =>
       sortedPlants(
         currentPlants.map((plant) =>
-          plant?.slug === savedPlant.slug ? savedPlant : plant,
+          isSamePlantRecord(plant, savedPlant) ? savedPlant : plant,
         ),
       ),
     );
     navigate('/admin');
+  };
+
+  const handleDelete = async (plantToDelete) => {
+    const deletedPlant = await deletePlantFromFile(plantToDelete);
+
+    setPlants((currentPlants) =>
+      sortedPlants(
+        currentPlants.filter((plant) => !isSamePlantRecord(plant, deletedPlant)),
+      ),
+    );
   };
 
   if (!isAuthenticated) {
@@ -631,7 +737,7 @@ const Admin = () => {
     );
   }
 
-  return <PlantManagement onLogout={handleLogout} plants={plants} />;
+  return <PlantManagement onDelete={handleDelete} onLogout={handleLogout} plants={plants} />;
 };
 
 export default Admin;
