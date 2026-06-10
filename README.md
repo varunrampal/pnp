@@ -27,3 +27,6 @@ This website is designed to present Peels Native Plants as a trusted wholesale n
 * Deployed on web hosting platform
 
 Live Link: https://peelsnativeplants.com
+
+
+
