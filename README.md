@@ -1,3 +1,5 @@
+<img width="1908" height="966" alt="ezgif-3e15132e1d4fc1bf (1)" src="https://github.com/user-attachments/assets/793cb157-35b4-419b-bf99-a11dfdb32387" />
+
 # Peels Native Plants Website
 
 A modern business website for **Peels Native Plants Ltd.**, a British Columbia-based native plant nursery supplying wholesale native trees, shrubs, perennials, and restoration plant materials.
@@ -30,3 +32,4 @@ Live Link: https://peelsnativeplants.com
 
 
 
+<img width="1908" height="966" alt="ezgif-3e15132e1d4fc1bf (1)" src="https://github.com/user-attachments/assets/18469751-73e2-4dc9-8f0b-b19baa33246a" />
