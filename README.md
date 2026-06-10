@@ -1,12 +1,29 @@
-# React + Vite
+# Peels Native Plants Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern business website for **Peels Native Plants Ltd.**, a British Columbia-based native plant nursery supplying wholesale native trees, shrubs, perennials, and restoration plant materials.
 
-Currently, two official plugins are available:
+## 🌱 About the Project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This website is designed to present Peels Native Plants as a trusted wholesale nursery specializing in BC native plants. The site helps customers learn about the company, browse plant availability, understand services, and contact the nursery for quotes, pickup, or delivery inquiries.
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* Clean and professional homepage
+* Company introduction and native plant nursery overview
+* Wholesale native plant availability section
+* Product/service information for trees, shrubs, perennials, and restoration plants
+* Contact section for customer inquiries
+* Mobile-friendly responsive design
+* SEO-friendly structure for native plant and nursery searches
+* Fast-loading static website structure
+
+## 🛠️ Tech Stack
+
+* HTML / CSS / JavaScript
+  or
+* React + Vite
+* Tailwind CSS
+* Responsive web design
+* Deployed on web hosting platform
+
+Live Link: https://peelsnativeplants.com
