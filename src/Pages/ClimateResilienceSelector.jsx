@@ -541,8 +541,8 @@ const ClimateResilienceSelector = () => {
           </div>
 
           <div className="climate-projection-panel">
-            <p className="advisor-eyebrow">2040 Projection</p>
-            <h2>Projected to perform well in 2040 BC climate conditions.</h2>
+            <p className="advisor-eyebrow">Projection</p>
+            <h2>Projected to perform well in BC climate conditions.</h2>
             <div className="climate-projection-grid">
               <div>
                 <span>Region</span>
