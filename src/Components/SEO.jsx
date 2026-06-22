@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import plants from '../json/PlantsList.json';
 
-const SITE_URL = 'https://www.peelsnativeplants.com';
+const SITE_URL = 'https://peelsnativeplants.com';
 const SITE_NAME = 'Peels Native Plants Ltd.';
 const DEFAULT_IMAGE = `${SITE_URL}/images/plants/default.jpg`;
 const BUSINESS_ID = `${SITE_URL}/#business`;

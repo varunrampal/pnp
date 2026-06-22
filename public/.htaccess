@@ -2,6 +2,10 @@
   RewriteEngine On
   RewriteBase /
 
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} !^peelsnativeplants\.com$ [NC]
+  RewriteRule ^(.*)$ https://peelsnativeplants.com/$1 [R=301,L]
+
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

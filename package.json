@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run seo:sitemap",
     "build": "vite build",
     "lint": "eslint .",
     "seo:sitemap": "node scripts/generate-sitemap.mjs",

@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const plants = require('../src/json/PlantsList.json');
 
-const SITE_URL = 'https://www.peelsnativeplants.com';
+const SITE_URL = 'https://peelsnativeplants.com';
 const SITEMAP_PATH = new URL('../public/sitemap.xml', import.meta.url);
 const LASTMOD = process.env.SITEMAP_LASTMOD || new Date().toISOString().slice(0, 10);
 

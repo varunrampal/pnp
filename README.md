@@ -26,7 +26,7 @@ This website is designed to present Peels Native Plants as a trusted wholesale n
 * Responsive web design
 * Deployed on web hosting platform
 
-Live Link: https://www.peelsnativeplants.com
+Live Link: https://peelsnativeplants.com
 
 
 
