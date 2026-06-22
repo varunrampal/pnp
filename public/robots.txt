@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /dragdrop
 Disallow: /files/desktop.ini
 Sitemap: https://www.peelsnativeplants.com/sitemap.xml

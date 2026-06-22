@@ -3,10 +3,14 @@ import { useLocation } from 'react-router-dom';
 import plants from '../json/PlantsList.json';
 
 const SITE_URL = 'https://www.peelsnativeplants.com';
+const SITE_NAME = 'Peels Native Plants Ltd.';
 const DEFAULT_IMAGE = `${SITE_URL}/images/plants/default.jpg`;
+const BUSINESS_ID = `${SITE_URL}/#business`;
+const WEBSITE_ID = `${SITE_URL}/#website`;
 
 const routeMeta = {
   '/': {
+    label: 'Home',
     title: 'Peels Native Plants Ltd. | Wholesale BC Native Plants',
     description:
       'Wholesale native trees, shrubs, perennials, live stakes, and restoration plant material grown in Langley for landscaping, habitat restoration, and municipal projects across BC.',
@@ -14,74 +18,98 @@ const routeMeta = {
       'wholesale native plants BC, Peels Native Plants, Langley nursery, restoration plants, BC native trees, native shrubs, live stakes',
   },
   '/plants': {
+    label: 'Plants',
     title: 'Wholesale Plant Availability | Peels Native Plants Ltd.',
     description:
       'Browse wholesale native trees, shrubs, perennials, groundcovers, and restoration species available from Peels Native Plants in Langley, British Columbia.',
     keywords:
       'BC plant availability, wholesale native plants, native trees BC, native shrubs BC, restoration nursery Langley',
+    schemaType: 'CollectionPage',
   },
   '/plant-advisor': {
-    title: 'Plant Advisor | Peels Native Plants Ltd.',
+    label: 'Plant Advisor',
+    title: 'Plant Advisor | Native Plant Recommendations for BC Sites',
     description:
-      'Mark a planting area on Google Maps and review plant recommendations from Peels Native Plants based on the selected site area.',
+      'Use the Peels Native Plants advisor to map a planting area and review native plant recommendations for BC landscape, restoration, and municipal projects.',
     keywords:
       'plant advisor BC, native plant recommendations, planting area map, Peels Native Plants advisor',
   },
   '/satellite-site-analysis': {
-    title: 'Satellite Site Analysis | Peels Native Plants Ltd.',
+    label: 'Satellite Site Analysis',
+    title: 'Satellite Site Analysis | BC Native Plant Planning Tool',
     description:
       'Drop a pin on a satellite map to estimate slope, vegetation density, nearby water, sun exposure, elevation, and BC native plant recommendations.',
     keywords:
       'satellite site analysis BC, native plant recommendations, slope vegetation water elevation plant advisor',
   },
   '/climate-resilience-selector': {
-    title: 'Climate Resilience Plant Selector | Peels Native Plants Ltd.',
+    label: 'Climate Resilience Plant Selector',
+    title: 'Climate Resilience Plant Selector | BC Native Plants',
     description:
       'Select BC native and climate-adapted plants by city, soil type, and exposure for drought, flood, heat, and 2040 climate resilience planning.',
     keywords:
       'climate resilient plants BC, drought tolerant natives, flood resistant plants, heat resilient native plants, climate adapted planting mixes',
   },
   '/about': {
+    label: 'About',
     title: 'About Peels Native Plants Ltd. | Langley Native Plant Nursery',
     description:
       'Learn about Peels Native Plants Ltd., a Langley nursery growing quality BC native plants for restoration, landscaping, mitigation, parks, and municipal projects.',
     keywords:
       'about Peels Native Plants, Langley native plant nursery, BC native plant growers, Fraser Valley nursery',
+    schemaType: 'AboutPage',
   },
   '/sales/information': {
-    title: 'Sales Information | Peels Native Plants Ltd.',
+    label: 'Sales Information',
+    title: 'Sales Information | Wholesale Native Plant Ordering in BC',
     description:
       'Review container sizes, live stake availability, ordering details, and substitution guidance for wholesale native plant orders in British Columbia.',
     keywords:
       'native plant container sizes, live stakes BC, wholesale plant ordering, BCLNA container standards',
   },
   '/faq': {
+    label: 'FAQ',
     title: 'FAQ | Wholesale Native Plants in BC',
     description:
-      'Answers to common questions about ordering, delivery, wholesale pricing, restoration plants, payment, and replacement policies at Peels Native Plants.',
+      'Find answers about ordering, delivery, wholesale pricing, restoration plants, payment, and replacement policies at Peels Native Plants.',
     keywords:
       'Peels Native Plants FAQ, native plant delivery BC, wholesale nursery questions, restoration plants BC',
   },
   '/contact': {
+    label: 'Contact',
     title: 'Contact Peels Native Plants Ltd. | Langley, BC',
     description:
       'Contact Peels Native Plants Ltd. in Langley, BC for wholesale native plant availability, quotes, delivery questions, and restoration project support.',
     keywords:
       'contact Peels Native Plants, Langley native plant nursery, wholesale plant quote BC, native plant availability',
+    schemaType: 'ContactPage',
   },
   '/quote': {
-    title: 'Request a Quote | Peels Native Plants Ltd.',
+    label: 'Request a Quote',
+    title: 'Request a Quote | Wholesale BC Native Plants',
     description:
       'Request a wholesale quote for BC native trees, shrubs, perennials, live stakes, and restoration plant material from Peels Native Plants.',
     keywords:
       'native plant quote BC, wholesale plant quote, restoration plant pricing, Peels Native Plants quote',
+    schemaType: 'ContactPage',
+  },
+  '/dragdrop': {
+    label: 'Drag and Drop',
+    title: 'Internal Drag and Drop Tool | Peels Native Plants Ltd.',
+    description:
+      'Internal drag and drop export tool for Peels Native Plants Ltd.',
+    keywords: 'Peels Native Plants internal tool',
+    robots: 'noindex, nofollow',
+    canonicalPath: '/dragdrop',
   },
   '/admin': {
+    label: 'Admin',
     title: 'Admin | Peels Native Plants Ltd.',
     description:
       'Administrative plant management for Peels Native Plants Ltd.',
-    keywords:
-      'Peels Native Plants admin',
+    keywords: 'Peels Native Plants admin',
+    robots: 'noindex, nofollow',
+    canonicalPath: '/admin',
   },
 };
 
@@ -113,7 +141,145 @@ const normalizePath = (pathname) => {
   return normalized || '/';
 };
 
-const canonicalUrl = (path) => `${SITE_URL}${path === '/' ? '/' : path}`;
+const canonicalUrl = (path = '/') => {
+  const normalized = path === '/' ? '/' : `/${path.replace(/^\/+|\/+$/g, '')}`;
+  return `${SITE_URL}${normalized === '/' ? '/' : normalized}`;
+};
+
+const compactText = (value) =>
+  String(value || '')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const truncateText = (value, maxLength = 155) => {
+  const text = compactText(value);
+
+  if (text.length <= maxLength) return text;
+
+  const shortened = text.slice(0, maxLength - 1);
+  const lastSpace = shortened.lastIndexOf(' ');
+
+  return `${shortened.slice(0, lastSpace > 80 ? lastSpace : shortened.length).trim()}.`;
+};
+
+const absoluteImageUrl = (path) => {
+  if (!path) return DEFAULT_IMAGE;
+  if (/^https?:\/\//i.test(path)) return path;
+
+  const cleanPath = path.replace(/^\.?\//, '').replace(/^public\//, '');
+  return `${SITE_URL}/${cleanPath}`;
+};
+
+const plantDisplayName = (plant) =>
+  compactText(
+    [plant.Name, plant.CommanName ? `(${plant.CommanName})` : '']
+      .filter(Boolean)
+      .join(' ')
+  );
+
+const findPlantByPath = (path) => {
+  const match = path.match(/^\/plant\/([^/]+)$/);
+  if (!match) return null;
+
+  const slug = decodeURIComponent(match[1]).toLowerCase();
+  return plants.find((plant) => plant.slug === slug) || null;
+};
+
+const plantDescription = (plant) => {
+  const fallback = [
+    plantDisplayName(plant),
+    plant.Type ? `is a ${plant.Type.toLowerCase()}` : 'is available',
+    'from Peels Native Plants for wholesale native plant, landscaping, and restoration projects in British Columbia.',
+  ].join(' ');
+
+  const details = [
+    plant.Description,
+    plant.Sun ? `Sun: ${plant.Sun}.` : '',
+    plant.Soil ? `Soil: ${plant.Soil}.` : '',
+    plant.Moisture ? `Moisture: ${plant.Moisture}.` : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  return truncateText(details || fallback);
+};
+
+const plantKeywords = (plant) =>
+  [
+    plant.Name,
+    plant.CommanName,
+    plant.Type,
+    plant.Region,
+    'BC native plants',
+    'wholesale plants',
+    'restoration plants',
+    'Peels Native Plants',
+  ]
+    .filter(Boolean)
+    .map(compactText)
+    .join(', ');
+
+const buildPlantMeta = (plant, path) => {
+  const titleName = plant.CommanName
+    ? `${plant.Name} (${plant.CommanName})`
+    : plant.Name;
+
+  return {
+    label: plantDisplayName(plant),
+    title: `${compactText(titleName)} | Peels Native Plants Ltd.`,
+    description: plantDescription(plant),
+    keywords: plantKeywords(plant),
+    image: absoluteImageUrl(plant.Imgpath),
+    imageAlt: plantDisplayName(plant),
+    schemaType: 'ItemPage',
+    canonicalPath: path,
+  };
+};
+
+const getPageContext = (path) => {
+  if (path.startsWith('/admin')) {
+    return {
+      meta: routeMeta['/admin'],
+      path: routeMeta['/admin'].canonicalPath,
+      noStructuredData: true,
+    };
+  }
+
+  const plant = findPlantByPath(path);
+
+  if (plant) {
+    return {
+      meta: buildPlantMeta(plant, path),
+      path,
+      plant,
+    };
+  }
+
+  if (path.startsWith('/plant/')) {
+    return {
+      meta: {
+        label: 'Plant Not Found',
+        title: 'Plant Not Found | Peels Native Plants Ltd.',
+        description:
+          'This plant record could not be found. Browse the Peels Native Plants wholesale plant availability list for current BC native plant options.',
+        keywords: 'Peels Native Plants, wholesale plant availability',
+        robots: 'noindex, follow',
+        canonicalPath: '/plants',
+      },
+      path,
+      noStructuredData: true,
+    };
+  }
+
+  const meta = routeMeta[path] || routeMeta['/'];
+
+  return {
+    meta,
+    path: meta.canonicalPath || path,
+    noStructuredData: meta.robots?.includes('noindex') || false,
+  };
+};
 
 const upsertMeta = (selector, attributes) => {
   let element = document.head.querySelector(selector);
@@ -142,11 +308,10 @@ const upsertLink = (selector, attributes) => {
 };
 
 const localBusinessSchema = {
-  '@context': 'https://schema.org',
   '@type': 'GardenStore',
-  '@id': `${SITE_URL}/#business`,
-  name: 'Peels Native Plants Ltd.',
-  url: SITE_URL,
+  '@id': BUSINESS_ID,
+  name: SITE_NAME,
+  url: canonicalUrl('/'),
   image: DEFAULT_IMAGE,
   telephone: '+1-604-217-1351',
   email: 'info@peelsnativeplants.com',
@@ -161,6 +326,14 @@ const localBusinessSchema = {
     postalCode: 'V2Y 2H1',
     addressCountry: 'CA',
   },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: '+1-604-217-1351',
+    email: 'info@peelsnativeplants.com',
+    contactType: 'sales',
+    areaServed: 'CA-BC',
+    availableLanguage: ['English'],
+  },
   areaServed: [
     {
       '@type': 'AdministrativeArea',
@@ -174,76 +347,141 @@ const localBusinessSchema = {
 };
 
 const websiteSchema = {
-  '@context': 'https://schema.org',
   '@type': 'WebSite',
-  '@id': `${SITE_URL}/#website`,
-  name: 'Peels Native Plants Ltd.',
-  url: SITE_URL,
+  '@id': WEBSITE_ID,
+  name: SITE_NAME,
+  url: canonicalUrl('/'),
   publisher: {
-    '@id': `${SITE_URL}/#business`,
+    '@id': BUSINESS_ID,
   },
 };
 
-const breadcrumbSchema = (path, meta) => {
-  const labels = {
-    '/': 'Home',
-    '/plants': 'Plants',
-    '/plant-advisor': 'Plant Advisor',
-    '/satellite-site-analysis': 'Satellite Site Analysis',
-    '/climate-resilience-selector': 'Climate Resilience Plant Selector',
-    '/about': 'About',
-    '/sales/information': 'Sales Information',
-    '/faq': 'FAQ',
-    '/contact': 'Contact',
-    '/quote': 'Request a Quote',
-    '/admin': 'Admin',
-  };
+const breadcrumbSchema = (path, meta, plant) => {
+  const homeItem = { label: routeMeta['/'].label, path: '/' };
+  let items = [homeItem];
 
-  const items =
-    path === '/'
-      ? [{ label: labels['/'], path: '/' }]
-      : [
-          { label: labels['/'], path: '/' },
-          { label: labels[path] || meta.title, path },
-        ];
+  if (plant) {
+    items = [
+      homeItem,
+      { label: routeMeta['/plants'].label, path: '/plants' },
+      { label: plantDisplayName(plant), path },
+    ];
+  } else if (path !== '/') {
+    items.push({
+      label: routeMeta[path]?.label || meta.label || meta.title,
+      path,
+    });
+  }
 
   return {
-    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      name: item.label,
+      name: compactText(item.label),
       item: canonicalUrl(item.path),
     })),
   };
 };
 
-const pageSchema = (path, meta) => {
+const plantProductSchema = (plant, meta, canonical) => {
+  const additionalProperty = [
+    ['Category', plant.Type],
+    ['Common name', plant.CommanName],
+    ['Sun exposure', plant.Sun],
+    ['Soil', plant.Soil],
+    ['Moisture', plant.Moisture],
+    ['Region', plant.Region],
+    ['Mature size', plant.MatureSize],
+    ['Restoration value', plant.RestorationValue],
+  ]
+    .filter(([, value]) => value)
+    .map(([name, value]) => ({
+      '@type': 'PropertyValue',
+      name,
+      value: compactText(value),
+    }));
+
+  return {
+    '@type': 'Product',
+    '@id': `${canonical}#product`,
+    name: compactText(plant.Name),
+    alternateName: plant.CommanName ? compactText(plant.CommanName) : undefined,
+    category: plant.Type,
+    image: meta.image,
+    description: meta.description,
+    url: canonical,
+    brand: {
+      '@id': BUSINESS_ID,
+    },
+    additionalProperty,
+  };
+};
+
+const plantsItemListSchema = () => ({
+  '@type': 'ItemList',
+  '@id': `${canonicalUrl('/plants')}#plant-list`,
+  name: 'Wholesale native plant availability',
+  itemListElement: plants.slice(0, 24).map((plant, index) => {
+    const url = plant.slug ? canonicalUrl(`/plant/${plant.slug}`) : canonicalUrl('/plants');
+
+    return {
+      '@type': 'ListItem',
+      position: index + 1,
+      url,
+      item: {
+        '@type': 'Product',
+        '@id': `${url}#product`,
+        name: plantDisplayName(plant),
+        category: plant.Type,
+        image: absoluteImageUrl(plant.Imgpath),
+        description:
+          plant.Description ||
+          `${plantDisplayName(plant)} is available from Peels Native Plants for wholesale native plant and landscape projects in British Columbia.`,
+        brand: {
+          '@id': BUSINESS_ID,
+        },
+      },
+    };
+  }),
+});
+
+const pageSchema = (path, meta, plant) => {
+  const canonical = canonicalUrl(meta.canonicalPath || path);
   const schemas = [
     localBusinessSchema,
     websiteSchema,
     {
-      '@context': 'https://schema.org',
-      '@type': 'WebPage',
-      '@id': `${canonicalUrl(path)}#webpage`,
-      url: canonicalUrl(path),
+      '@type': meta.schemaType || 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
       name: meta.title,
       description: meta.description,
       isPartOf: {
-        '@id': `${SITE_URL}/#website`,
+        '@id': WEBSITE_ID,
       },
       about: {
-        '@id': `${SITE_URL}/#business`,
+        '@id': BUSINESS_ID,
+      },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: meta.image || DEFAULT_IMAGE,
       },
     },
-    breadcrumbSchema(path, meta),
+    breadcrumbSchema(path, meta, plant),
   ];
+
+  if (plant) {
+    schemas[2].mainEntity = {
+      '@id': `${canonical}#product`,
+    };
+    schemas.push(plantProductSchema(plant, meta, canonical));
+  }
 
   if (path === '/faq') {
     schemas.push({
-      '@context': 'https://schema.org',
       '@type': 'FAQPage',
+      '@id': `${canonical}#faq`,
       mainEntity: faqItems.map((item) => ({
         '@type': 'Question',
         name: item.question,
@@ -256,32 +494,16 @@ const pageSchema = (path, meta) => {
   }
 
   if (path === '/plants') {
-    schemas.push({
-      '@context': 'https://schema.org',
-      '@type': 'ItemList',
-      name: 'Wholesale native plant availability',
-      itemListElement: plants.slice(0, 24).map((plant, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        item: {
-          '@type': 'Product',
-          name: `${plant.Name}${plant.CommanName ? ` (${plant.CommanName})` : ''}`,
-          category: plant.Type,
-          image: plant.Imgpath
-            ? `${SITE_URL}/${plant.Imgpath.replace(/^\.?\//, '')}`
-            : DEFAULT_IMAGE,
-          description:
-            plant.Description ||
-            `${plant.Name} is available from Peels Native Plants for wholesale native plant and landscape projects in British Columbia.`,
-          brand: {
-            '@id': `${SITE_URL}/#business`,
-          },
-        },
-      })),
-    });
+    schemas[2].mainEntity = {
+      '@id': `${canonical}#plant-list`,
+    };
+    schemas.push(plantsItemListSchema());
   }
 
-  return schemas;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': schemas,
+  };
 };
 
 const SEO = () => {
@@ -290,11 +512,15 @@ const SEO = () => {
   useEffect(() => {
     if (typeof document === 'undefined') return;
 
-    const path = normalizePath(location.pathname);
-    const isAdminPath = path.startsWith('/admin');
-    const meta = isAdminPath ? routeMeta['/admin'] : routeMeta[path] || routeMeta['/'];
-    const canonical = canonicalUrl(path);
+    const normalizedPath = normalizePath(location.pathname);
+    const { meta, path, plant, noStructuredData } = getPageContext(normalizedPath);
+    const canonical = canonicalUrl(meta.canonicalPath || path);
+    const image = meta.image || DEFAULT_IMAGE;
+    const imageAlt = meta.imageAlt || SITE_NAME;
+    const robots = meta.robots || 'index, follow';
+    const ogType = plant ? 'product' : 'website';
 
+    document.documentElement.setAttribute('lang', 'en-CA');
     document.title = meta.title;
 
     upsertMeta('meta[name="description"]', {
@@ -307,15 +533,27 @@ const SEO = () => {
     });
     upsertMeta('meta[name="robots"]', {
       name: 'robots',
-      content: isAdminPath ? 'noindex, nofollow' : 'index, follow',
+      content: robots,
+    });
+    upsertMeta('meta[name="author"]', {
+      name: 'author',
+      content: SITE_NAME,
+    });
+    upsertMeta('meta[name="theme-color"]', {
+      name: 'theme-color',
+      content: '#0F4229',
     });
     upsertMeta('meta[property="og:type"]', {
       property: 'og:type',
-      content: 'website',
+      content: ogType,
     });
     upsertMeta('meta[property="og:locale"]', {
       property: 'og:locale',
       content: 'en_CA',
+    });
+    upsertMeta('meta[property="og:site_name"]', {
+      property: 'og:site_name',
+      content: SITE_NAME,
     });
     upsertMeta('meta[property="og:title"]', {
       property: 'og:title',
@@ -331,7 +569,11 @@ const SEO = () => {
     });
     upsertMeta('meta[property="og:image"]', {
       property: 'og:image',
-      content: DEFAULT_IMAGE,
+      content: image,
+    });
+    upsertMeta('meta[property="og:image:alt"]', {
+      property: 'og:image:alt',
+      content: imageAlt,
     });
     upsertMeta('meta[name="twitter:card"]', {
       name: 'twitter:card',
@@ -345,23 +587,44 @@ const SEO = () => {
       name: 'twitter:description',
       content: meta.description,
     });
+    upsertMeta('meta[name="twitter:url"]', {
+      name: 'twitter:url',
+      content: canonical,
+    });
     upsertMeta('meta[name="twitter:image"]', {
       name: 'twitter:image',
-      content: DEFAULT_IMAGE,
+      content: image,
+    });
+    upsertMeta('meta[name="twitter:image:alt"]', {
+      name: 'twitter:image:alt',
+      content: imageAlt,
     });
     upsertLink('link[rel="canonical"]', {
       rel: 'canonical',
       href: canonical,
     });
+    upsertLink('link[rel="alternate"][hreflang="en-ca"]', {
+      rel: 'alternate',
+      hreflang: 'en-ca',
+      href: canonical,
+    });
 
-    let script = document.head.querySelector('#structured-data');
+    const existingScript = document.head.querySelector('#structured-data');
+
+    if (noStructuredData) {
+      existingScript?.remove();
+      return;
+    }
+
+    let script = existingScript;
     if (!script) {
       script = document.createElement('script');
       script.id = 'structured-data';
       script.type = 'application/ld+json';
       document.head.appendChild(script);
     }
-    script.textContent = JSON.stringify(pageSchema(path, meta));
+
+    script.textContent = JSON.stringify(pageSchema(path, meta, plant));
   }, [location.pathname]);
 
   return null;
