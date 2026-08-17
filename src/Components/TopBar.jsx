@@ -1,33 +1,15 @@
-import React from 'react'
+import React from 'react';
 
-const TopBar = () => {
-  return (
-   
-    <div class="container-fluid bg-dark text-light px-0 py-2">
-        <div class="row gx-0 d-none d-lg-flex">
-            <div class="col-lg-7 px-5 text-start">
-                <div class="h-100 d-inline-flex align-items-center me-4">
-                    <span class="fa fa-phone-alt me-2"></span>
-                    <span>604-217-1351</span>
-                </div>
-                <div class="h-100 d-inline-flex align-items-center">
-                    <span class="far fa-envelope me-2"></span>
-                    <span>info@peelsnativeplants.com</span>
-                </div>
-            </div>
-            <div class="col-lg-5 px-5 text-end">
-                <div class="h-100 d-inline-flex align-items-center mx-n2">
-                    <span>Follow Us:</span>
-                    <span class="btn btn-link text-light" aria-hidden="true"><i class="fab fa-facebook-f"></i></span>
-                    <span class="btn btn-link text-light" aria-hidden="true"><i class="fab fa-twitter"></i></span>
-                    <span class="btn btn-link text-light" aria-hidden="true"><i class="fab fa-linkedin-in"></i></span>
-                    <span class="btn btn-link text-light" aria-hidden="true"><i class="fab fa-instagram"></i></span>
-                </div>
-            </div>
-        </div>
-    
+const TopBar = () => (
+  <div className="nursery-topbar">
+    <div className="nursery-topbar__inner">
+      <div className="nursery-topbar__contact">
+        <a href="tel:+18334989898"><i className="fa fa-phone-alt" aria-hidden="true"></i><span>1-833-498-9898</span></a>
+        <a href="mailto:info@peelsnativeplants.com"><i className="far fa-envelope" aria-hidden="true"></i><span>info@peelsnativeplants.com</span></a>
+      </div>
+      <div className="nursery-topbar__positioning"><span aria-hidden="true"></span>Specialist native-plant growers <b>Langley, BC</b></div>
     </div>
-  )
-}
+  </div>
+);
 
-export default TopBar
+export default TopBar;

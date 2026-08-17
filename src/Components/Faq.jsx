@@ -9,7 +9,7 @@ export default function FaQ() {
         </p>
       </AccordionItem>
 
-      <AccordionItem question="Where is Peels Native Plants located?">
+      <AccordionItem question="Where is PEELS Native Plants located?">
         <p>
           We're based in British Columbia, Canada, and serve wholesale customers throughout the
           province, including the Lower Mainland, Vancouver Island, and the BC Interior.

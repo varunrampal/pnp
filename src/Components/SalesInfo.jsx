@@ -7,7 +7,7 @@ const SalesInfo = () => {
         <div class="row g-5 align-items-center">
             <div class="col-lg-12 wow fadeInUp" data-wow-delay="0.1s">
                 <h2 class="fs-5 fw-bold text-primary">Container Sizes</h2>
-                <p class="mb-4">Peels Native Plants Ltd. offers a variety of container sizes to meet your requirements. In addition to our most frequently used containers shown below, we sell balled and burlapped trees (B&B), both spade and hand-dug, in a range of heights and calibers. Please contact us for availability and price.</p>
+                <p class="mb-4">PEELS offers a variety of container sizes to meet your requirements. In addition to our most frequently used containers shown below, we sell balled and burlapped trees (B&B), both spade and hand-dug, in a range of heights and calibers. Please contact us for availability and price.</p>
                 <p class="mb-4">Plant sizes meet or exceed the BCLNA standards for their respective container. We try to stock as wide a range of sizes as possible but should you have specific requirements, we will be glad to provide a quote.</p>
                 <ul><li>72 plug - 3.7cm x 5.7cm</li><li>38 plug - 5.4cm x 12.7cm</li><li>50 plug - 4.3cm x 11.4cm</li><li>10cm pot = 18 per tray</li><li>15cm pot = #1</li><li>21cm pot = #2</li><li>25.4cm x 20.3cm pot = #3</li><li>26.3cm x 30.7cm = #5</li><li>36cm pot = #7</li><li>40cm pot = #10</li><li>44cm pot = #15</li><li>38cm x 38cm = Bag</li></ul>
             </div>

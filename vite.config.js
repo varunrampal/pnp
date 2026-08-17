@@ -1,8 +1,10 @@
+/* global process */
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import resendQuoteHandler from './api/quote-resend.js'
 
 const editablePlantFields = [
   'Name',
@@ -264,7 +266,35 @@ const adminPlantWriter = () => ({
   configurePreviewServer: addAdminPlantWriterMiddleware,
 })
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), adminPlantWriter()],
+const localQuoteApi = (mode) => ({
+  name: 'local-quote-api',
+  configureServer(server) {
+    const environment = loadEnv(mode, process.cwd(), '')
+    ;['RESEND_API_KEY', 'RESEND_FROM_EMAIL', 'RESEND_FROM_NAME', 'QUOTE_RECIPIENT_EMAIL', 'QUOTE_ALLOWED_ORIGINS'].forEach((name) => {
+      if (environment[name]) process.env[name] = environment[name]
+    })
+    server.middlewares.use('/api/quote-resend.php', (request, response) => {
+      let rawBody = ''
+      request.on('data', chunk => {
+        rawBody += chunk
+        if (rawBody.length > 4 * 1024 * 1024) request.destroy()
+      })
+      request.on('end', async () => {
+        try {
+          request.body = rawBody ? JSON.parse(rawBody) : {}
+          response.status = statusCode => { response.statusCode = statusCode; return response }
+          response.json = payload => { response.setHeader('Content-Type', 'application/json'); response.end(JSON.stringify(payload)) }
+          await resendQuoteHandler(request, response)
+        } catch (error) {
+          console.error('Local quote API failed:', error)
+          sendJson(response, 400, { error: 'The quote request was invalid.' })
+        }
+      })
+    })
+  },
 })
+
+// https://vite.dev/config/
+export default defineConfig(({ mode }) => ({
+  plugins: [react(), adminPlantWriter(), localQuoteApi(mode)],
+}))

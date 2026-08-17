@@ -1,52 +1,63 @@
-import React from 'react'
+import React from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../assets/images/header-logo.png';
 
-const availabilityUrl = '/files/PNP_Availability_List.xlsx';
+const availabilityUrl = '/files/PEELS-Native-Plants-Availability.xlsx';
 
-const Footer = () => {  
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <div class="container-fluid bg-dark text-light footer mt-5 py-5 wow fadeIn" data-wow-delay="0.1s">
-    <div class="container py-5">
-        <div class="row g-5">
-            <div class="col-lg-8 col-md-6">
-                <h4 class="text-white mb-4">Our Office</h4>
-                <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>24095 65 Ave, Langley Twp, BC, V2Y 2H1</p>
-                <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>604-217-1351</p>
-                <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@peelsnativeplants.com</p>
-                <div class="d-flex pt-2">
-                    <span class="btn btn-square btn-outline-light rounded-circle me-2" aria-hidden="true"><i class="fab fa-twitter"></i></span>
-                    <span class="btn btn-square btn-outline-light rounded-circle me-2" aria-hidden="true"><i class="fab fa-facebook-f"></i></span>
-                    <span class="btn btn-square btn-outline-light rounded-circle me-2" aria-hidden="true"><i class="fab fa-youtube"></i></span>
-                    <span class="btn btn-square btn-outline-light rounded-circle me-2" aria-hidden="true"><i class="fab fa-linkedin-in"></i></span>
-                </div>
-            </div>
-           
-            <div class="col-lg-3 col-md-6">
-                <h4 class="text-white mb-4">Quick Links</h4>
-                <Link to="/" class="btn btn-link">Home</Link>
-                <Link to="/about" class="btn btn-link">About</Link>
-                <Link to="/contact" class="btn btn-link">Contact</Link>
-                <Link to="/quote" class="btn btn-link">Get A Quote</Link>
-                <Link to="/sales/information" class="btn btn-link">Sales Information</Link>
-                <Link to="/plants" class="btn btn-link">Plants</Link>
-                <a href={availabilityUrl} download class="btn btn-link">Availability List</a>
-            </div>
-            {/* <div class="col-lg-3 col-md-6">
-            <h4 class="text-white mb-4">Our Location</h4>
-            <div class="map-container">
-                <iframe title="Peel Native Plants Location"  src="https://www.google.com/maps?q=22064+64+Ave,+Langley,+BC,+V2Y+2N8&amp;output=embed" width="100%" height="250" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style={{border:0}}></iframe>
-                
-                </div>
-            </div> */}
-            <div class="col-lg-12 col-md-6">
-                <h4 class="text-white mb-4">Our Location</h4>
-                <iframe title="Peels Native Plants Location"  src="https://www.google.com/maps?q=24095+65+Ave,+Langley+Twp,+BC,+V2Y+2H1&amp;output=embed" width="100%" height="350" loading="lazy" referrerPolicy="no-referrer-when-downgrade" style={{border:0}}></iframe>
-              
-            </div>
+    <footer className="footer premium-footer text-light">
+      <div className="container">
+        <div className="footer-project-callout">
+          <div>
+            <span className="footer-eyebrow">PROJECT SUPPORT</span>
+            <h2>Planning a living landscape?</h2>
+          </div>
+          <Link to="/quote" className="btn btn-outline-light py-3 px-4">Start a project <i className="fa fa-arrow-right ms-3" aria-hidden="true"></i></Link>
         </div>
-    </div>
-</div>
-  )
-}
 
-export default Footer
+        <div className="footer-main-grid">
+          <div className="footer-intro">
+            <Link to="/" className="footer-brand" aria-label="PEELS Native Plants home">
+              <img src={logo} alt="PEELS Native Plants" className="footer-logo" width="240" height="160" loading="lazy" decoding="async" />
+            </Link>
+            <p className="footer-positioning">Specialist native-plant growers for restoration, habitat renewal and resilient landscapes across British Columbia.</p>
+          </div>
+
+          <nav className="footer-nav" aria-label="Company links">
+            <h3>Company</h3>
+            <Link to="/about">About PEELS</Link>
+            <Link to="/plants">Plant catalogue</Link>
+            <Link to="/sales/information">Ordering</Link>
+            <Link to="/faq">FAQ</Link>
+            <Link to="/contact">Contact</Link>
+          </nav>
+
+          <nav className="footer-nav" aria-label="Planning resources">
+            <h3>Project tools</h3>
+            <Link to="/plant-advisor">Plant Advisor</Link>
+            <Link to="/satellite-site-analysis">Site Analysis</Link>
+            <Link to="/climate-resilience-selector">Climate Selector</Link>
+            <a href={availabilityUrl} download>Availability list <i className="fa fa-download ms-2" aria-hidden="true"></i></a>
+          </nav>
+
+          <div className="footer-contact">
+            <h3>Nursery</h3>
+            <address>24095 65 Ave<br />Langley Township, BC<br />V2Y 2H1</address>
+            <a href="tel:+16048328791">1-833-498-9898</a>
+            <a href="mailto:info@peelsnativeplants.com">info@peelsnativeplants.com</a>
+          </div>
+        </div>
+
+        <div className="footer-bottom-line">
+          <p>© {currentYear} Peels Native Plants Ltd.</p>
+          <p>PEELS · NATIVE PLANTS · BRITISH COLUMBIA</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

@@ -5,47 +5,38 @@ import ZoomImage from '../Components/ZoomImage ';
 
 const PlantDetail = () => {
   const { slug } = useParams();
-  const plant = items.find(p => p.slug === slug);
+  const plant = items.find(item => item.slug === slug);
+  if (!plant) return <div className="container py-5">Plant not found.</div>;
 
-  if (!plant) {
-    return <div>Plant not found</div>;
-  }
+  const specifications = [
+    ['Plant type', plant.Type], ['Regional fit', plant.Region], ['Light', plant.Sun], ['Moisture', plant.Moisture],
+    ['Soil', plant.Soil], ['Slope', plant.Slope], ['Mature size', plant.MatureSize], ['Establishment irrigation', plant.Irrigation],
+  ];
 
-  return (
-    <>
-    <div className="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
-      <div className="container text-center py-5">
-        <h1 className="display-3 text-white mb-4 animated slideInDown">{plant.Name}</h1>
+  return <>
+    <header className="container-fluid page-header py-5 mb-5">
+      <div className="container py-5">
+        <p className="hero-kicker">{plant.Type} · {plant.Region || 'British Columbia'}</p>
+        <h1 className="display-3 text-white mb-3"><em>{plant.Name}</em></h1>
         <p className="text-white">{plant.CommanName}</p>
       </div>
-    </div>
-    <div className="container py-5">
-      <div className="mb-4">
-        <Link to="/plants" className="btn btn-secondary">← Back to Plants</Link>
-      </div>
-      <div className="row">
-        <div className="col-md-6">
-          <ZoomImage src={plant.Imgpath} alt={plant.Name} />
-        </div>
-        <div className="col-md-6">
-          <h2>{plant.Name}</h2>
-          <h4>{plant.CommanName}</h4>
-          <p><strong>Category:</strong> {plant.Type}</p>
-          <p><strong>Uses:</strong> {plant.Uses}</p>
-          <p><strong>Mature Size:</strong> {plant.MatureSize}</p>
-          <p><strong>Sun:</strong> {plant.Sun}</p>
-          <p><strong>Soil:</strong> {plant.Soil}</p>
-          <p><strong>Moisture:</strong> {plant.Moisture}</p>
-          <p><strong>Restoration Value:</strong> {plant.RestorationValue}</p>
-          {plant.Description && <p><strong>Description:</strong> {plant.Description}</p>}
-          {/* <div className="mt-4">
-            <Link to="/quote" className="btn btn-primary">Get Quote</Link>
-          </div> */}
+    </header>
+    <main className="container py-5">
+      <div className="mb-5"><Link to="/plants" className="editorial-link">← Back to plant catalogue</Link></div>
+      <div className="row g-5 plant-detail-layout">
+        <div className="col-lg-6"><ZoomImage src={plant.Imgpath} alt={plant.CommanName || plant.Name} /></div>
+        <div className="col-lg-6">
+          <p className="editorial-kicker">SPECIES RECORD</p>
+          <h2><em>{plant.Name}</em></h2>
+          <h3 className="plant-detail-common">{plant.CommanName}</h3>
+          {plant.Description && <p className="plant-detail-description">{plant.Description}</p>}
+          <dl className="plant-specification-grid">{specifications.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value || 'Ask PEELS'}</dd></div>)}</dl>
+          <div className="plant-function"><span>PROJECT USE</span><p>{plant.Uses || 'Contact PEELS for application guidance.'}</p><span>RESTORATION VALUE</span><p>{plant.RestorationValue || 'Contact PEELS for ecological-function guidance.'}</p></div>
+          <Link to="/quote" className="btn btn-primary py-3 px-4">Add to project enquiry <i className="fa fa-arrow-right ms-3" aria-hidden="true"></i></Link>
         </div>
       </div>
-    </div>
-    </>
-  );
+    </main>
+  </>;
 };
 
 export default PlantDetail;

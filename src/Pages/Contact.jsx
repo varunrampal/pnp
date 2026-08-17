@@ -1,18 +1,23 @@
 import React from 'react';
-import ContactUs from '../Components/ContactUs'
+import ContactUs from '../Components/ContactUs';
 
-const Contact = () => {
-  return (
-    <>
-    <div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container text-center py-5">
-            <h1 class="display-3 text-white mb-4 animated slideInDown">Contact Us</h1>
+const Contact = () => (
+  <>
+    <header className="container-fluid page-header contact-page-header py-5">
+      <div className="container py-5">
+        <div className="row align-items-end g-4">
+          <div className="col-lg-8">
+            <p className="hero-kicker">PROJECT ENQUIRIES · PEELS NATIVE PLANTS</p>
+            <h1 className="display-3 text-white mb-3">Start with the site.</h1>
+          </div>
+          <div className="col-lg-4">
+            <p className="contact-header-copy">Tell us what the landscape needs to accomplish. We’ll help you move from site conditions to dependable plant material.</p>
+          </div>
         </div>
-    </div>
-<ContactUs/>
-  
-   </>
-  )
-}
+      </div>
+    </header>
+    <ContactUs />
+  </>
+);
 
-export default Contact
+export default Contact;

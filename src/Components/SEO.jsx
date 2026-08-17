@@ -3,7 +3,8 @@ import { useLocation } from 'react-router-dom';
 import plants from '../json/PlantsList.json';
 
 const SITE_URL = 'https://peelsnativeplants.com';
-const SITE_NAME = 'Peels Native Plants Ltd.';
+const SITE_NAME = 'PEELS Native Plants';
+const LEGAL_NAME = 'Peels Native Plants Ltd.';
 const DEFAULT_IMAGE = `${SITE_URL}/images/plants/default.jpg`;
 const BUSINESS_ID = `${SITE_URL}/#business`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
@@ -11,17 +12,17 @@ const WEBSITE_ID = `${SITE_URL}/#website`;
 const routeMeta = {
   '/': {
     label: 'Home',
-    title: 'Peels Native Plants Ltd. | Wholesale BC Native Plants',
+    title: 'PEELS Native Plants | Ecological Horticulture in BC',
     description:
-      'Wholesale native trees, shrubs, perennials, live stakes, and restoration plant material grown in Langley for landscaping, habitat restoration, and municipal projects across BC.',
+      'PEELS grows project-ready native plant material for ecological restoration, habitat renewal and resilient landscapes across British Columbia.',
     keywords:
       'wholesale native plants BC, Peels Native Plants, Langley nursery, restoration plants, BC native trees, native shrubs, live stakes',
   },
   '/plants': {
     label: 'Plants',
-    title: 'Wholesale Plant Availability | Peels Native Plants Ltd.',
+    title: 'Wholesale Plant Availability | PEELS Native Plants',
     description:
-      'Browse wholesale native trees, shrubs, perennials, groundcovers, and restoration species available from Peels Native Plants in Langley, British Columbia.',
+      'Browse wholesale native trees, shrubs, perennials, groundcovers, and restoration species available from PEELS in Langley, British Columbia.',
     keywords:
       'BC plant availability, wholesale native plants, native trees BC, native shrubs BC, restoration nursery Langley',
     schemaType: 'CollectionPage',
@@ -30,7 +31,7 @@ const routeMeta = {
     label: 'Plant Advisor',
     title: 'Plant Advisor | Native Plant Recommendations for BC Sites',
     description:
-      'Use the Peels Native Plants advisor to map a planting area and review native plant recommendations for BC landscape, restoration, and municipal projects.',
+      'Use the PEELS plant advisor to map a planting area and review native plant recommendations for BC landscape, restoration, and municipal projects.',
     keywords:
       'plant advisor BC, native plant recommendations, planting area map, Peels Native Plants advisor',
   },
@@ -52,9 +53,9 @@ const routeMeta = {
   },
   '/about': {
     label: 'About',
-    title: 'About Peels Native Plants Ltd. | Langley Native Plant Nursery',
+    title: 'About PEELS | Langley Native Plant Nursery',
     description:
-      'Learn about Peels Native Plants Ltd., a Langley nursery growing quality BC native plants for restoration, landscaping, mitigation, parks, and municipal projects.',
+      'Learn about PEELS, a Langley nursery growing quality BC native plants for restoration, landscaping, mitigation, parks, and municipal projects.',
     keywords:
       'about Peels Native Plants, Langley native plant nursery, BC native plant growers, Fraser Valley nursery',
     schemaType: 'AboutPage',
@@ -71,15 +72,15 @@ const routeMeta = {
     label: 'FAQ',
     title: 'FAQ | Wholesale Native Plants in BC',
     description:
-      'Find answers about ordering, delivery, wholesale pricing, restoration plants, payment, and replacement policies at Peels Native Plants.',
+      'Find answers about ordering, delivery, wholesale pricing, restoration plants, payment, and replacement policies at PEELS.',
     keywords:
       'Peels Native Plants FAQ, native plant delivery BC, wholesale nursery questions, restoration plants BC',
   },
   '/contact': {
     label: 'Contact',
-    title: 'Contact Peels Native Plants Ltd. | Langley, BC',
+    title: 'Contact PEELS Native Plants | Langley, BC',
     description:
-      'Contact Peels Native Plants Ltd. in Langley, BC for wholesale native plant availability, quotes, delivery questions, and restoration project support.',
+      'Contact PEELS in Langley, BC for wholesale native plant availability, quotes, delivery questions, and restoration project support.',
     keywords:
       'contact Peels Native Plants, Langley native plant nursery, wholesale plant quote BC, native plant availability',
     schemaType: 'ContactPage',
@@ -88,7 +89,7 @@ const routeMeta = {
     label: 'Request a Quote',
     title: 'Request a Quote | Wholesale BC Native Plants',
     description:
-      'Request a wholesale quote for BC native trees, shrubs, perennials, live stakes, and restoration plant material from Peels Native Plants.',
+      'Request a wholesale quote for BC native trees, shrubs, perennials, live stakes, and restoration plant material from PEELS.',
     keywords:
       'native plant quote BC, wholesale plant quote, restoration plant pricing, Peels Native Plants quote',
     schemaType: 'ContactPage',
@@ -115,14 +116,14 @@ const routeMeta = {
 
 const faqItems = [
   {
-    question: 'Where is Peels Native Plants located?',
+    question: 'Where is PEELS Native Plants located?',
     answer:
-      'Peels Native Plants is located in Langley Township, British Columbia, and serves wholesale customers throughout BC.',
+      'PEELS Native Plants is located in Langley Township, British Columbia, and serves wholesale customers throughout BC.',
   },
   {
     question: 'Do you deliver outside the Lower Mainland?',
     answer:
-      'Yes, Peels Native Plants delivers throughout British Columbia, including Vancouver Island and the BC Interior.',
+      'Yes, PEELS delivers throughout British Columbia, including Vancouver Island and the BC Interior.',
   },
   {
     question: 'Do you offer wholesale pricing?',
@@ -190,7 +191,7 @@ const plantDescription = (plant) => {
   const fallback = [
     plantDisplayName(plant),
     plant.Type ? `is a ${plant.Type.toLowerCase()}` : 'is available',
-    'from Peels Native Plants for wholesale native plant, landscaping, and restoration projects in British Columbia.',
+    'from PEELS for wholesale native plant, landscaping, and restoration projects in British Columbia.',
   ].join(' ');
 
   const details = [
@@ -227,7 +228,7 @@ const buildPlantMeta = (plant, path) => {
 
   return {
     label: plantDisplayName(plant),
-    title: `${compactText(titleName)} | Peels Native Plants Ltd.`,
+    title: `${compactText(titleName)} | PEELS Native Plants`,
     description: plantDescription(plant),
     keywords: plantKeywords(plant),
     image: absoluteImageUrl(plant.Imgpath),
@@ -260,9 +261,9 @@ const getPageContext = (path) => {
     return {
       meta: {
         label: 'Plant Not Found',
-        title: 'Plant Not Found | Peels Native Plants Ltd.',
+        title: 'Plant Not Found | PEELS Native Plants',
         description:
-          'This plant record could not be found. Browse the Peels Native Plants wholesale plant availability list for current BC native plant options.',
+          'This plant record could not be found. Browse the PEELS wholesale plant availability list for current BC native plant options.',
         keywords: 'Peels Native Plants, wholesale plant availability',
         robots: 'noindex, follow',
         canonicalPath: '/plants',
@@ -308,12 +309,13 @@ const upsertLink = (selector, attributes) => {
 };
 
 const localBusinessSchema = {
-  '@type': 'GardenStore',
+  '@type': 'LocalBusiness',
   '@id': BUSINESS_ID,
-  name: SITE_NAME,
+  name: LEGAL_NAME,
+  alternateName: SITE_NAME,
   url: canonicalUrl('/'),
   image: DEFAULT_IMAGE,
-  telephone: '+1-604-217-1351',
+  telephone: '+1-833-498-9898',
   email: 'info@peelsnativeplants.com',
   priceRange: '$$',
   description:
@@ -328,7 +330,7 @@ const localBusinessSchema = {
   },
   contactPoint: {
     '@type': 'ContactPoint',
-    telephone: '+1-604-217-1351',
+    telephone: '+1-833-498-9898',
     email: 'info@peelsnativeplants.com',
     contactType: 'sales',
     areaServed: 'CA-BC',
@@ -437,7 +439,7 @@ const plantsItemListSchema = () => ({
         image: absoluteImageUrl(plant.Imgpath),
         description:
           plant.Description ||
-          `${plantDisplayName(plant)} is available from Peels Native Plants for wholesale native plant and landscape projects in British Columbia.`,
+          `${plantDisplayName(plant)} is available from PEELS for wholesale native plant and landscape projects in British Columbia.`,
         brand: {
           '@id': BUSINESS_ID,
         },
@@ -537,7 +539,7 @@ const SEO = () => {
     });
     upsertMeta('meta[name="author"]', {
       name: 'author',
-      content: SITE_NAME,
+      content: LEGAL_NAME,
     });
     upsertMeta('meta[name="theme-color"]', {
       name: 'theme-color',

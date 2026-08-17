@@ -536,7 +536,7 @@ const buildPlantAdvisorExportHtml = ({
       <button onclick="window.print()">Print / Save PDF</button>
     </div>
     <header>
-      <p class="eyebrow">Peels Native Plants Ltd.</p>
+      <p class="eyebrow">PEELS Native Plants</p>
       <h1>Selected Plant Advisor PDF</h1>
       <p class="summary">${escapeHtml(selectedCountLabel)}${
         generatedDate ? ` - Generated ${escapeHtml(generatedDate)}` : ''

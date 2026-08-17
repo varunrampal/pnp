@@ -2,7 +2,6 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import TopBar from './Components/TopBar';
 import NavBar from './Components/NavBar';
-import BottomFeatures from './Components/BottomFeatures';
 import Footer from './Components/Footer';
 import Whatsapp from './Components/Whatsapp.jsx';
 import SEO from './Components/SEO.jsx';
@@ -64,7 +63,6 @@ const App = () => {
                
           </Routes>
           </Suspense>
-          <BottomFeatures/>
           <Footer/>
          
         </Router>

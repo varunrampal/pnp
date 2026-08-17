@@ -15,21 +15,22 @@ const AboutUs = () => {
     }
     
   return (
-    <div class="container-xxl py-5">
+    <div class="container-xxl py-5 editorial-section about-editorial">
         <div class="container">
             <div class="row g-5 align-items-end">
                 <div class="col-lg-3 col-md-5 wow fadeInUp" data-wow-delay="0.1s">
-                    <img class="img-fluid rounded" data-wow-delay="0.1s" src={AboutImage} alt="Peels Native Plants nursery in Langley, BC" width="500" height="1000" loading="lazy" decoding="async"/>
+                    <figure className="botanical-figure">
+                        <img class="img-fluid" data-wow-delay="0.1s" src={AboutImage} alt="PEELS native plant nursery in Langley, BC" width="500" height="1000" loading="lazy" decoding="async"/>
+                        <figcaption>Propagation · Fraser Valley</figcaption>
+                    </figure>
                 </div>
                 <div class="col-lg-6 col-md-7 wow fadeInUp" data-wow-delay="0.3s">
                     {/* <h1 class="display-1 text-primary mb-0">25</h1>
                     <p class="text-primary mb-4">Year of Experience</p> */}
-                    <h2 class="display-5 mb-4">Grow with Peels Native Plants Ltd.!</h2>
-                    <p class="mb-4">Located in Langley in the beautiful Fraser Valley, Peels Native Plants Ltd. proudly specializes in the propagation and cultivation of top-quality BC native plants. Our plants are ideal for commercial and residential landscapes, habitat and wetland restoration, stream rehabilitation, mitigation projects, highways, parks, and more.
-
-With one of the largest inventories in the region and unmatched growing capabilities, we are ready to supply all your wholesale native plant needs -- big or small!
-
-At Peels Native Plants, we're passionate about delivering exceptional plants and outstanding customer service. Let's grow success together!</p>
+                    <p className="editorial-kicker">SPECIALIST NATIVE-PLANT GROWERS</p>
+                    <h2 class="display-5 mb-4">Rooted in the Fraser Valley</h2>
+                    <p class="mb-4">PEELS propagates and grows native plant material for landscapes where ecological performance matters. Our Langley nursery supports restoration teams, landscape professionals, municipalities and land stewards working throughout British Columbia.</p>
+                    <p className="mb-4">We focus on vigorous roots, reliable establishment and practical species guidance. From a focused planting plan to a multi-phase restoration contract, every order receives the same horticultural attention and responsive coordination.</p>
                 
 {lnkbtn}
                   
@@ -40,15 +41,15 @@ At Peels Native Plants, we're passionate about delivering exceptional plants and
                         <div class="col-12 col-sm-6 col-lg-12">
                             <div class="border-start ps-4">
                                 <i class="fa fa-award fa-3x text-primary mb-3"></i>
-                                <h4 class="mb-3">Best Selling Plants</h4>
-                                <span>We strive every day to produce the best quality plants</span>
+                                <h4 class="mb-3">Purpose-grown stock</h4>
+                                <span>Native plant material cultivated for professional installation and establishment.</span>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-lg-12">
                             <div class="border-start ps-4">
                                 <i class="fa fa-users fa-3x text-primary mb-3"></i>
-                                <h4 class="mb-3">Dedicated Team</h4>
-                                <span>Dedicated team to provide quality support and advice.</span>
+                                <h4 class="mb-3">Regional knowledge</h4>
+                                <span>Practical guidance informed by BC growing conditions and ecological applications.</span>
                             </div>
                         </div>
                     </div>

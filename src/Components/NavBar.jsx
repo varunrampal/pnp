@@ -1,47 +1,43 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import logo from "../assets/images/header-logo.png";
 
-const availabilityUrl = '/files/PNP_Availability_List.xlsx';
+const availabilityUrl = '/files/PEELS-Native-Plants-Availability.xlsx';
 
 const NavBar = () => {
     return (
-        <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-2">
-            <Link to="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5"><img src={logo} alt="Peels Native Plants Ltd." className="header-logo" width="103" height="104" decoding="async" /></Link>
+        <nav className="navbar navbar-expand-lg navbar-light sticky-top premium-navbar">
+          <div className="premium-navbar__inner">
+            <Link to="/" className="navbar-brand" aria-label="PEELS Native Plants home"><img src={logo} alt="PEELS Native Plants" className="header-logo" width="240" height="160" decoding="async" /></Link>
 
-            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
+            <button type="button" className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <Link to="/" class="nav-item nav-link">Home</Link>
-
-                    <Link to={"/about"} state={{ hiddenParam: 'nobtn' }} class="nav-item nav-link">About</Link>
-
-                    <Link to="/plants" class="nav-item nav-link">Our Plants</Link>
-                    <Link to="/plant-advisor" class="nav-item nav-link">Plant Advisor</Link>
-                    <Link to="/satellite-site-analysis" class="nav-item nav-link">Site Analysis</Link>
-                    <Link to="/climate-resilience-selector" class="nav-item nav-link">Eco Adapt</Link>
-                     {/* <Link to="/plantstest" class="nav-item nav-link">PlantsTest</Link> */}
-                      {/* <Link to="/dragdrop" class="nav-item nav-link">DragDrop</Link> */}
-
-                    <div class="nav-item dropdown">
-                        <button type="button" class="nav-link dropdown-toggle border-0 bg-transparent" data-bs-toggle="dropdown" aria-expanded="false">Sales</button>
-                        <div class="dropdown-menu bg-light m-0">
-                            <Link to="/sales/information" class="dropdown-item">Information</Link>
-
+            <div className="collapse navbar-collapse" id="navbarCollapse">
+                <div className="navbar-nav ms-auto">
+                    <NavLink to="/plants" className={({ isActive }) => `nav-item nav-link${isActive ? ' active' : ''}`}>Plants</NavLink>
+                    <a href="/#applications" className="nav-item nav-link">Applications</a>
+                    <a href="/#expertise" className="nav-item nav-link">Expertise</a>
+                    <div className="nav-item dropdown">
+                        <button type="button" className="nav-link dropdown-toggle border-0 bg-transparent" data-bs-toggle="dropdown" aria-expanded="false">Resources</button>
+                        <div className="dropdown-menu bg-light m-0">
+                            <Link to="/plant-advisor" className="dropdown-item">Plant Advisor <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>
+                            <Link to="/satellite-site-analysis" className="dropdown-item">Site Analysis</Link>
+                            <Link to="/climate-resilience-selector" className="dropdown-item">Climate Selector</Link>
+                            <Link to="/sales/information" className="dropdown-item">Ordering Information</Link>
+                            <Link to="/faq" className="dropdown-item">FAQ</Link>
                         </div>
                     </div>
-
-                    {/* <Link to="" class="nav-item nav-link" onClick={handleDownload}>Availability</Link> */}
-                    <Link to="/faq" class="nav-item nav-link">FAQ</Link>
-                    <Link to="/contact" class="nav-item nav-link">Contact</Link>
-                    <Link to="/admin" class="nav-item nav-link">Admin</Link>
+                    <NavLink to="/about" state={{ hiddenParam: 'nobtn' }} className={({ isActive }) => `nav-item nav-link${isActive ? ' active' : ''}`}>About</NavLink>
+                    <NavLink to="/contact" className={({ isActive }) => `nav-item nav-link${isActive ? ' active' : ''}`}>Contact</NavLink>
                 </div>
-                <a href={availabilityUrl} download class="btn btn-primary py-4 px-lg-4 rounded-0 d-none d-lg-block" style={{ marginRight: '2px' }}>Availability<i class="fa fa-download ms-3"></i></a>
-                <Link to="/quote" class="btn btn-primary py-4 px-lg-4 rounded-0 d-none d-lg-block">Get A Quote <i class="fa fa-arrow-right ms-3"></i></Link>
+                <div className="nav-actions">
+                    <a href={availabilityUrl} download className="nav-availability">Availability <i className="fa fa-download" aria-hidden="true"></i></a>
+                    <Link to="/quote" className="nav-quote">Get a quote <i className="fa fa-arrow-right" aria-hidden="true"></i></Link>
+                </div>
 
             </div>
+          </div>
         </nav>
     )
 }
