@@ -11,12 +11,18 @@ function text_value(array $body, string $key, int $limit = 500): string { return
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') { header('Allow: POST'); respond(405, ['error' => 'Method not allowed.']); }
 if ((int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 4 * 1024 * 1024) respond(413, ['error' => 'The quote request is too large.']);
-$allowedOrigins = array_values(array_filter(array_map(static fn(string $value): string => strtolower(rtrim(trim($value), '/')), explode(',', env_value('QUOTE_ALLOWED_ORIGINS')))));
+$configuredOrigins = array_values(array_filter(array_map(static fn(string $value): string => strtolower(rtrim(trim($value), '/')), explode(',', env_value('QUOTE_ALLOWED_ORIGINS')))));
+$allowedHosts = ['pnpplants.ca', 'www.pnpplants.ca', 'peelsnativeplants.com', 'www.peelsnativeplants.com'];
+foreach ($configuredOrigins as $configuredOrigin) {
+    $configuredHost = strtolower((string) (parse_url($configuredOrigin, PHP_URL_HOST) ?: $configuredOrigin));
+    if ($configuredHost !== '') $allowedHosts[] = preg_replace('/:\d+$/', '', $configuredHost);
+}
+$allowedHosts = array_values(array_unique($allowedHosts));
 $origin = strtolower(rtrim(trim((string) ($_SERVER['HTTP_ORIGIN'] ?? '')), '/'));
 $originHost = strtolower((string) (parse_url($origin, PHP_URL_HOST) ?: ''));
 $requestHost = strtolower(preg_replace('/:\d+$/', '', trim((string) ($_SERVER['HTTP_HOST'] ?? ''))));
 $isSameSite = $originHost !== '' && $requestHost !== '' && $originHost === $requestHost;
-if ($allowedOrigins && $origin && !$isSameSite && !in_array($origin, $allowedOrigins, true)) respond(403, ['error' => 'This website is not allowed to submit quote requests.']);
+if ($origin && !$isSameSite && !in_array($originHost, $allowedHosts, true)) respond(403, ['error' => 'This website is not allowed to submit quote requests.']);
 $body = json_decode((string) file_get_contents('php://input'), true);
 if (!is_array($body)) respond(400, ['error' => 'The quote request is invalid.']);
 if (text_value($body, 'website') !== '') respond(200, ['ok' => true]);

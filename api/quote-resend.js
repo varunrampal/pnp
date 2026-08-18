@@ -26,12 +26,16 @@ export default async function handler(request, response) {
   }
   try {
     const normalizeOrigin = value => String(value || '').trim().replace(/\/$/, '').toLowerCase();
-    const allowedOrigins = String(process.env.QUOTE_ALLOWED_ORIGINS || '').split(',').map(normalizeOrigin).filter(Boolean);
+    const configuredOrigins = String(process.env.QUOTE_ALLOWED_ORIGINS || '').split(',').map(normalizeOrigin).filter(Boolean);
+    const allowedHosts = new Set(['pnpplants.ca', 'www.pnpplants.ca', 'peelsnativeplants.com', 'www.peelsnativeplants.com']);
+    configuredOrigins.forEach(configuredOrigin => {
+      try { allowedHosts.add(new URL(configuredOrigin).hostname.toLowerCase()); } catch { allowedHosts.add(configuredOrigin.replace(/:\d+$/, '')); }
+    });
     const requestOrigin = normalizeOrigin(request.headers?.origin);
     const originHost = requestOrigin ? new URL(requestOrigin).hostname.toLowerCase() : '';
     const requestHost = String(request.headers?.host || '').trim().replace(/:\d+$/, '').toLowerCase();
     const isSameSite = originHost && requestHost && originHost === requestHost;
-    if (allowedOrigins.length && requestOrigin && !isSameSite && !allowedOrigins.includes(requestOrigin)) return response.status(403).json({ error: 'This website is not allowed to submit quote requests.' });
+    if (requestOrigin && !isSameSite && !allowedHosts.has(originHost)) return response.status(403).json({ error: 'This website is not allowed to submit quote requests.' });
 
     const body = typeof request.body === 'string' ? JSON.parse(request.body) : (request.body || {});
     if (clean(body.website)) return response.status(200).json({ ok: true });
