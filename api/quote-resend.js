@@ -25,9 +25,13 @@ export default async function handler(request, response) {
     return response.status(405).json({ error: 'Method not allowed.' });
   }
   try {
-    const allowedOrigins = String(process.env.QUOTE_ALLOWED_ORIGINS || '').split(',').map(origin => origin.trim()).filter(Boolean);
-    const requestOrigin = request.headers?.origin;
-    if (allowedOrigins.length && requestOrigin && !allowedOrigins.includes(requestOrigin)) return response.status(403).json({ error: 'This website is not allowed to submit quote requests.' });
+    const normalizeOrigin = value => String(value || '').trim().replace(/\/$/, '').toLowerCase();
+    const allowedOrigins = String(process.env.QUOTE_ALLOWED_ORIGINS || '').split(',').map(normalizeOrigin).filter(Boolean);
+    const requestOrigin = normalizeOrigin(request.headers?.origin);
+    const originHost = requestOrigin ? new URL(requestOrigin).hostname.toLowerCase() : '';
+    const requestHost = String(request.headers?.host || '').trim().replace(/:\d+$/, '').toLowerCase();
+    const isSameSite = originHost && requestHost && originHost === requestHost;
+    if (allowedOrigins.length && requestOrigin && !isSameSite && !allowedOrigins.includes(requestOrigin)) return response.status(403).json({ error: 'This website is not allowed to submit quote requests.' });
 
     const body = typeof request.body === 'string' ? JSON.parse(request.body) : (request.body || {});
     if (clean(body.website)) return response.status(200).json({ ok: true });
