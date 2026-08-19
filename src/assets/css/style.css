@@ -2122,7 +2122,7 @@ a.contact-method:hover strong {
 .premium-navbar .navbar-brand {
     display: flex;
     height: auto;
-    min-width: 205px;
+    min-width: 105px;
     margin: 0 clamp(1.5rem, 3vw, 3.5rem) 0 0;
     padding: .4rem 1.25rem .45rem 0;
     align-items: center;
@@ -2131,7 +2131,18 @@ a.contact-method:hover strong {
 }
 
 .premium-navbar .navbar-brand::after { top: 20%; right: 0; height: 60%; background: rgba(23,61,43,.2); }
-.premium-navbar .header-logo { width: clamp(165px, 14vw, 195px); height: 66px; }
+.premium-navbar .header-logo { width: 72px; height: 72px; max-height: none; object-fit: contain; }
+.brand-wordmark {
+    margin-top: 1px;
+    color: var(--dark);
+    font-family: "Newsreader", Georgia, serif;
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .09em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
 
 .premium-navbar .navbar-collapse { align-items: stretch; }
 .premium-navbar .navbar-nav .nav-link { padding-right: clamp(.6rem, .9vw, .95rem); padding-left: clamp(.6rem, .9vw, .95rem); }
@@ -2153,8 +2164,8 @@ a.contact-method:hover strong {
 
 @media (max-width: 1199.98px) and (min-width: 992px) {
     .premium-navbar__inner { width: calc(100% - 1.5rem); }
-    .premium-navbar .navbar-brand { min-width: 175px; margin-right: 1rem; padding-right: .75rem; }
-    .premium-navbar .header-logo { width: 165px; height: 62px; }
+    .premium-navbar .navbar-brand { min-width: 88px; margin-right: 1rem; padding-right: .75rem; }
+    .premium-navbar .header-logo { width: 64px; height: 64px; }
     .nav-actions { padding-left: .6rem; }
 }
 
@@ -2164,7 +2175,7 @@ a.contact-method:hover strong {
     .premium-navbar { min-height: 82px; padding: 0; }
     .premium-navbar__inner { width: calc(100% - 2rem); min-height: 82px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
     .premium-navbar .navbar-brand { min-width: 0; margin-right: 0; padding-right: 0; }
-    .premium-navbar .header-logo { width: clamp(155px, 42vw, 185px); height: 62px; }
+    .premium-navbar .header-logo { width: 62px; height: 62px; }
     .premium-navbar .navbar-collapse { flex-basis: calc(100% + 2rem); margin-right: -1rem; margin-left: -1rem; }
     .premium-navbar .navbar-nav .nav-link::before { border-radius: 0; }
     .nav-actions { padding-left: 0; }
@@ -2176,4 +2187,29 @@ a.contact-method:hover strong {
     .nursery-topbar__contact { width: 100%; justify-content: space-between; gap: .75rem; }
     .nursery-topbar__contact a { font-size: .65rem; }
     .nursery-topbar__contact a:last-child span { display: none; }
+}
+
+.premium-footer .footer-brand {
+    width: 104px;
+    padding: .35rem;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.premium-footer .footer-logo {
+    width: 96px;
+    height: 96px;
+    max-height: none;
+    object-fit: contain;
+}
+
+.footer-wordmark {
+    margin-top: .2rem;
+    color: var(--dark);
+    font-family: "Newsreader", Georgia, serif;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    white-space: nowrap;
 }

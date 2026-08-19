@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import logo from "../assets/images/header-logo.png";
+import logo from "../assets/images/peels-logo.jpeg";
 
 const availabilityUrl = '/files/PEELS-Native-Plants-Availability.xlsx';
 
@@ -8,7 +8,7 @@ const NavBar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light sticky-top premium-navbar">
           <div className="premium-navbar__inner">
-            <Link to="/" className="navbar-brand" aria-label="PEELS Native Plants home"><img src={logo} alt="PEELS Native Plants" className="header-logo" width="240" height="160" decoding="async" /></Link>
+            <Link to="/" className="navbar-brand" aria-label="PEELS Native Plants home"><img src={logo} alt="" className="header-logo" width="500" height="500" decoding="async" /><span className="brand-wordmark">Peels Native</span></Link>
 
             <button type="button" className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../assets/images/header-logo.png';
+import logo from '../assets/images/peels-logo.jpeg';
 
 const availabilityUrl = '/files/PEELS-Native-Plants-Availability.xlsx';
 
@@ -21,7 +21,8 @@ const Footer = () => {
         <div className="footer-main-grid">
           <div className="footer-intro">
             <Link to="/" className="footer-brand" aria-label="PEELS Native Plants home">
-              <img src={logo} alt="PEELS Native Plants" className="footer-logo" width="240" height="160" loading="lazy" decoding="async" />
+              <img src={logo} alt="" className="footer-logo" width="500" height="500" loading="lazy" decoding="async" />
+              <span className="footer-wordmark">Peels Native</span>
             </Link>
             <p className="footer-positioning">Specialist native-plant growers for restoration, habitat renewal and resilient landscapes across British Columbia.</p>
           </div>
