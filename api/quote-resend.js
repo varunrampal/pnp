@@ -43,6 +43,7 @@ export default async function handler(request, response) {
     const companyName = clean(body.companyName, 160);
     const email = clean(body.email, 254).toLowerCase();
     const plantList = clean(body.plantList, 5000);
+    const projectNotes = clean(body.projectNotes, 5000);
     const attachment = validateAttachment(body.attachment);
     if (!fullName || !EMAIL_PATTERN.test(email)) return response.status(400).json({ error: 'Please provide your name and a valid email address.' });
     if (!plantList && !attachment) return response.status(400).json({ error: 'Enter your plant requirements or attach a plant list.' });
@@ -53,11 +54,19 @@ export default async function handler(request, response) {
     const fromName = clean(process.env.RESEND_FROM_NAME || 'PEELS Native Plants', 100);
     if (!apiKey || !EMAIL_PATTERN.test(fromEmail) || !EMAIL_PATTERN.test(recipientEmail)) throw new Error('Resend is not configured.');
 
-    const details = [['Name', fullName], ['Company', companyName || 'Not provided'], ['Email', email], ['Phone', clean(body.phone, 60) || 'Not provided'], ['Project location', clean(body.location, 160) || 'Not provided'], ['Required timing', clean(body.requiredBy, 80) || 'Not provided'], ['Plant requirements', plantList || 'See attached plant list']];
+    const details = [['Name', fullName], ['Company', companyName || 'Not provided'], ['Email', email], ['Phone', clean(body.phone, 60) || 'Not provided'], ['Project location', clean(body.location, 160) || 'Not provided'], ['Required timing', clean(body.requiredBy, 80) || 'Not provided'], ['Plant list', plantList || 'See attached plant list'], ['Project notes', projectNotes || 'Not provided']];
     const rows = details.map(([label, value]) => `<tr><th style="padding:8px;text-align:left;vertical-align:top">${escapeHtml(label)}</th><td style="padding:8px;white-space:pre-wrap">${escapeHtml(value)}</td></tr>`).join('');
     const resendResponse = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ from: `${fromName} <${fromEmail}>`, to: [recipientEmail], reply_to: email, subject: `New quote request — ${companyName || fullName}`, html: `<h2>New PEELS website quote request</h2><table style="border-collapse:collapse">${rows}</table>`, ...(attachment ? { attachments: [attachment] } : {}) }) });
     if (!resendResponse.ok) { console.error('Resend email failed:', resendResponse.status, await resendResponse.text()); throw new Error('The email service rejected the request.'); }
     const result = await resendResponse.json();
+    try {
+      const customerSummary = [['Project location', clean(body.location, 160) || 'Not provided'], ['Required timing', clean(body.requiredBy, 80) || 'Not provided'], ['Plant list', plantList || 'Attached to your request'], ['Project notes', projectNotes || 'Not provided']];
+      const customerRows = customerSummary.map(([label, value]) => `<tr><th style="padding:8px;text-align:left;vertical-align:top;color:#173d2b">${escapeHtml(label)}</th><td style="padding:8px;white-space:pre-wrap">${escapeHtml(value)}</td></tr>`).join('');
+      const acknowledgementResponse = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ from: `${fromName} <${fromEmail}>`, to: [email], reply_to: recipientEmail, subject: 'We received your quote request', html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#26352d"><h2 style="color:#173d2b">Thank you, ${escapeHtml(fullName)}.</h2><p>We have received your quote request and our nursery team will review it shortly.</p><p>We respond during nursery business hours. If we need more information about availability, substitutions, delivery or timing, we will contact you directly.</p><h3 style="color:#173d2b">Your request summary</h3><table style="border-collapse:collapse">${customerRows}</table><p style="margin:24px 0 4px">PEELS Native Plants</p><p style="margin:0 0 12px"><a href="tel:+18334989898" style="color:#173d2b;text-decoration:none">1-833-498-9898</a></p><img src="https://peelsnativeplants.com/assets/peels-logo-BiL_axi_.jpeg" alt="PEELS Native Plants" width="120" style="display:block;width:120px;height:auto;border:0"></div>` }) });
+      if (!acknowledgementResponse.ok) console.error('Customer quote acknowledgement failed:', acknowledgementResponse.status, await acknowledgementResponse.text());
+    } catch (acknowledgementError) {
+      console.error('Customer quote acknowledgement failed:', acknowledgementError);
+    }
     return response.status(200).json({ ok: true, id: result.id });
   } catch (error) {
     console.error('Resend quote submission failed:', error);

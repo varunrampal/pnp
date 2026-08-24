@@ -1794,6 +1794,20 @@ a.contact-method:hover strong {
 .quote-form label { display: block; margin-bottom: .55rem; color: var(--secondary); font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .quote-form .form-control { min-height: 52px; padding: .8rem .9rem; background: transparent; font-size: .9rem; }
 .quote-form textarea.form-control { min-height: 210px; resize: vertical; }
+.quote-form textarea.quote-project-notes { min-height: 120px; }
+.quote-plant-list { min-width: 0; margin: 0; padding: 0; border: 0; }
+.quote-plant-list legend { margin: 0 0 .55rem; color: var(--secondary); font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.quote-plant-list > .quote-field-help { margin: 0 0 1rem; }
+.quote-plant-list-head, .quote-plant-row { display: grid; grid-template-columns: minmax(180px, 2fr) minmax(90px, .65fr) minmax(150px, 1.2fr) 32px; gap: .65rem; }
+.quote-plant-list-head { padding: 0 .15rem .45rem; color: var(--secondary); font-size: .58rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.quote-plant-rows { display: grid; gap: .65rem; }
+.quote-plant-row { align-items: center; }
+.quote-plant-row label { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.quote-remove-plant { display: inline-flex; width: 32px; height: 32px; padding: 0; border: 0; align-items: center; justify-content: center; background: transparent; color: var(--clay); cursor: pointer; }
+.quote-remove-plant span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.quote-remove-plant:hover { color: var(--dark); }
+.quote-add-plant { margin-top: 1rem; padding: .55rem 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--primary); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.quote-add-plant i { margin-right: .4rem; }
 .quote-form-heading { display: flex; margin-bottom: 2rem; align-items: flex-start; gap: 1rem; }
 .quote-form-heading--project { margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid var(--stone); }
 .quote-form-heading > span { padding-top: .2rem; color: var(--clay); font-family: "Newsreader", Georgia, serif; font-style: italic; }
@@ -1838,6 +1852,12 @@ a.contact-method:hover strong {
     .quote-submit-row .btn { width: 100%; }
     .quote-upload { grid-template-columns: 1fr; }
     .quote-upload-button { width: 100%; }
+    .quote-plant-list-head { display: none; }
+    .quote-plant-row { padding: 1rem; border: 1px solid var(--stone); grid-template-columns: minmax(0, 1fr) 36px; }
+    .quote-plant-row > div { grid-column: 1 / -1; }
+    .quote-plant-row label { position: static; width: auto; height: auto; margin: 0 0 .55rem; overflow: visible; clip: auto; white-space: normal; }
+    .quote-plant-row label span { color: var(--clay); }
+    .quote-remove-plant { grid-column: 2; justify-self: end; }
 }
 
 /*** Branded primary navigation ***/
