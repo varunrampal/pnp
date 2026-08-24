@@ -4,9 +4,9 @@ import ReactJsAlert from 'reactjs-alert';
 const MAX_ATTACHMENT_BYTES = 2.5 * 1024 * 1024;
 const ACCEPTED_FILE_TYPES = '.xlsx,.xls,.csv,.pdf,.doc,.docx,.jpg,.jpeg,.png';
 const EMPTY_PLANT_ROWS = [
-  { id: 1, plant: '', quantity: '', format: '' },
-  { id: 2, plant: '', quantity: '', format: '' },
-  { id: 3, plant: '', quantity: '', format: '' },
+  { id: 1, plant: '', quantity: '', size: '' },
+  { id: 2, plant: '', quantity: '', size: '' },
+  { id: 3, plant: '', quantity: '', size: '' },
 ];
 
 const fileToBase64 = file => new Promise((resolve, reject) => {
@@ -58,7 +58,7 @@ const Quote = () => {
   };
 
   const addPlantRow = () => {
-    setPlantRows(rows => [...rows, { id: nextPlantId.current++, plant: '', quantity: '', format: '' }]);
+    setPlantRows(rows => [...rows, { id: nextPlantId.current++, plant: '', quantity: '', size: '' }]);
   };
 
   const removePlantRow = id => {
@@ -69,9 +69,12 @@ const Quote = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const plantList = plantRows
-      .filter(row => row.plant.trim() || row.quantity.trim() || row.format.trim())
-      .map((row, index) => `${index + 1}. ${row.plant.trim() || 'Plant not specified'} | Quantity: ${row.quantity.trim() || 'Not specified'} | Size / format: ${row.format.trim() || 'Not specified'}`)
+      .filter(row => row.plant.trim() || row.quantity.trim() || row.size.trim())
+      .map((row, index) => `${index + 1}. ${row.plant.trim() || 'Plant not specified'} | Quantity: ${row.quantity.trim() || 'Not specified'} | Size: ${row.size.trim() || 'Not specified'}`)
       .join('\n');
+    const plantItems = plantRows
+      .filter(row => row.plant.trim() || row.quantity.trim() || row.size.trim())
+      .map(row => ({ plant: row.plant.trim(), quantity: row.quantity.trim(), size: row.size.trim() }));
     const projectNotes = String(data.get('project_notes') || '').trim();
     if (!plantList && !attachment) {
       showMessage('Enter your plant requirements or attach a plant list.');
@@ -92,7 +95,7 @@ const Quote = () => {
         body: JSON.stringify({
           companyName: data.get('cname'), fullName: data.get('name'), email: data.get('email'),
           phone: data.get('phone'), location: data.get('project_location'), requiredBy: data.get('required_timing'),
-          plantList, projectNotes, website: data.get('website'), attachment: encodedAttachment,
+          plantList, plantItems, projectNotes, website: data.get('website'), attachment: encodedAttachment,
         }),
       });
       const result = await response.json().catch(() => ({}));
@@ -140,13 +143,13 @@ const Quote = () => {
                   <fieldset className="quote-plant-list">
                     <legend>Plant list</legend>
                     <p className="quote-field-help">Add one plant per row. Approximate quantities and sizes are welcome.</p>
-                    <div className="quote-plant-list-head" aria-hidden="true"><span>Plant or species</span><span>Quantity</span><span>Size / format</span><span></span></div>
+                    <div className="quote-plant-list-head" aria-hidden="true"><span>Plant or species</span><span>Quantity</span><span>Size</span><span></span></div>
                     <div className="quote-plant-rows">
                       {plantRows.map((row, index) => (
                         <div className="quote-plant-row" key={row.id}>
                           <div><label htmlFor={`quote-plant-${row.id}`}>Plant or species <span>{index + 1}</span></label><input className="form-control" id={`quote-plant-${row.id}`} type="text" value={row.plant} onChange={event => updatePlantRow(row.id, 'plant', event.target.value)} placeholder="e.g. Red-osier dogwood" /></div>
                           <div><label htmlFor={`quote-quantity-${row.id}`}>Quantity</label><input className="form-control" id={`quote-quantity-${row.id}`} type="text" inputMode="numeric" value={row.quantity} onChange={event => updatePlantRow(row.id, 'quantity', event.target.value)} placeholder="e.g. 20" /></div>
-                          <div><label htmlFor={`quote-format-${row.id}`}>Size / format</label><input className="form-control" id={`quote-format-${row.id}`} type="text" value={row.format} onChange={event => updatePlantRow(row.id, 'format', event.target.value)} placeholder="e.g. #1 container" /></div>
+                          <div><label htmlFor={`quote-size-${row.id}`}>Size</label><input className="form-control" id={`quote-size-${row.id}`} type="text" value={row.size} onChange={event => updatePlantRow(row.id, 'size', event.target.value)} placeholder="e.g. #1 container" /></div>
                           <button className="quote-remove-plant" type="button" onClick={() => removePlantRow(row.id)} aria-label={`Remove plant row ${index + 1}`}><i className="fa fa-times" aria-hidden="true"></i><span>Remove</span></button>
                         </div>
                       ))}
