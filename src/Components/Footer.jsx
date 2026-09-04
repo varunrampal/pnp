@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/peels-logo.jpeg';
 
-const availabilityUrl = '/files/PEELS-Native-Plants-Availability.xlsx';
+const availabilityUrl = '/files/PEELS-Native-Plants-Availability.pdf';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

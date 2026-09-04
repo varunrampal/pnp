@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import image1 from "../assets/images/peels/nursery-hero.jpg";
 
-const availabilityUrl = '/files/PEELS-Native-Plants-Availability.xlsx';
+const availabilityUrl = '/files/PEELS-Native-Plants-Availability.pdf';
 
 
 const Carousel = () => {

@@ -46,7 +46,7 @@ const PaginatedFilterSearchSort = ({ items }) => {
       <div className="container catalogue-shell">
         <div className="catalogue-toolbar">
           <div><strong>{filteredData.length} species</strong><p>Filter the working catalogue by plant type and site conditions.</p></div>
-          <a href="/files/PEELS-Native-Plants-Availability.xlsx" download className="editorial-link">Download current availability <i className="fa fa-download" aria-hidden="true"></i></a>
+          <a href="/files/PEELS-Native-Plants-Availability.pdf" download className="editorial-link">Download current availability <i className="fa fa-download" aria-hidden="true"></i></a>
         </div>
         <div className="row mb-5 g-3 catalogue-filters">
           <div className="col-lg-4"><label htmlFor="plant-search">Search</label><input id="plant-search" type="search" placeholder="Botanical or common name" className="form-control" value={searchTerm} onChange={event => setSearchTerm(event.target.value)} /></div>
